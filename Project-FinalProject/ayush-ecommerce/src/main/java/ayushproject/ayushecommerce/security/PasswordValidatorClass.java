@@ -2,6 +2,7 @@ package ayushproject.ayushecommerce.security;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.constraints.Size;
 
 public class PasswordValidatorClass implements ConstraintValidator<PasswordValidator,String> {
 
@@ -15,6 +16,7 @@ public class PasswordValidatorClass implements ConstraintValidator<PasswordValid
     }
 
     @PasswordValidator
+    @Size(min = 8,max = 15)
     private String password;
     private String confirmPassword;
 

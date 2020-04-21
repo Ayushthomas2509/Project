@@ -115,6 +115,7 @@ public class Bootstrap implements ApplicationRunner {
         phone.setDescription("Class Efficinet");
         phone.setInStock(IN_STOCK.Yes);
         phone.setQuantity(10);
+        phone.setSellerId(3);
         phone.setStorage("256 gb");
         phone.setWarranty("1 Year");
         phone.setType("Cellular Phone");
@@ -128,9 +129,9 @@ public class Bootstrap implements ApplicationRunner {
         shirt.setFit("Regular");
         shirt.setMaterial("Cotton 100%");
         shirt.setQuantity(15);
+        shirt.setSellerId(3);
         shirt.setInStock(IN_STOCK.Yes);
         shirt.setName("Shirt UCB");
-        shirt.setSeller(seller1);
         shirt.setActive(true);
         shirt.setPrice(5000);
         productRepo.save(shirt);
@@ -142,9 +143,9 @@ public class Bootstrap implements ApplicationRunner {
         shirt1.setFit("Regular");
         shirt1.setMaterial("Cotton 100%");
         shirt1.setQuantity(15);
+        shirt1.setSellerId(3);
         shirt1.setInStock(IN_STOCK.Yes);
         shirt1.setName("Shirt POLO");
-        shirt1.setSeller(seller1);
         shirt1.setActive(true);
         shirt1.setPrice(4000);
         productRepo.save(shirt1);
@@ -183,7 +184,7 @@ public class Bootstrap implements ApplicationRunner {
 
         Category categoryShirt=new Category();
         categoryShirt.setName("Shirt");
-        categoryShirt.setParentId(12);
+        categoryShirt.setParentId(10);
         categoryShirt.setParentCategory(category2);
         categoryRepo.save(categoryShirt);
 

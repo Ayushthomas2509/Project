@@ -10,6 +10,7 @@ import ayushproject.ayushecommerce.repo.CategoryFieldRepo;
 import ayushproject.ayushecommerce.repo.CategoryRepo;
 import ayushproject.ayushecommerce.repo.ProductRepo;
 import ayushproject.ayushecommerce.security.PasswordValidatorClass;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;

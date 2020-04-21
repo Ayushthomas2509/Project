@@ -92,6 +92,11 @@ public class ProductController {
         return productService.findAllProductVariations(productId);
     }
 
+    @GetMapping("/products/{productId}/similar-products")
+    public List<Product> findSimilarProduct(@PathVariable Integer productId){
+        return productService.findSimilarProduct(productId);
+    }
+
 
 
 }

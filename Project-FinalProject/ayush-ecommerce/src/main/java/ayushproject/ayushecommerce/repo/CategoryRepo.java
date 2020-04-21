@@ -1,6 +1,7 @@
 package ayushproject.ayushecommerce.repo;
 
 import ayushproject.ayushecommerce.entities.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;

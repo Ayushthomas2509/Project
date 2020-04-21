@@ -136,6 +136,21 @@ public class ProductService {
         return variations;
     }
 
+    public List<Product> findSimilarProduct(Integer productId){
+        List<Product> similar=new ArrayList<>();
+        Product product=findProduct(productId);
+        Iterator<Product> productIterator= productRepo.findAll().iterator();
+        while (productIterator.hasNext()) {
+            Product currentProduct=productIterator.next();
+            if (currentProduct.getCategoryId()==product.getCategoryId()){
+
+                similar.add(currentProduct);
+            }
+
+        }
+        return similar;
+    }
+
 
 
 

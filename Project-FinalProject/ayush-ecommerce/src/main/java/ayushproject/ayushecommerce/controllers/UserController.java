@@ -18,30 +18,33 @@ public class UserController {
 
     @GetMapping("/users")
     public Iterable<User> allUsers(){
-        //userService.ensureUser();
+        userService.ensureAdmin();
         return userService.allUsers();
     }
 
 
     @GetMapping("users/{name}")
-    public User findUser(@PathVariable String name){
+    public User findUser(@PathVariable String name)
+    {     userService.ensureAdmin();
          return userService.findUser(name);
     }
 
 
     @GetMapping("users/edit")
     public String editUser(@RequestBody User user){
+        userService.ensureUser();
         return userService.editUser(user);
     }
 
     @DeleteMapping("/users/remove/{name}")
-    public String deleteUser(@PathVariable String name){
+    public String deleteUser(@PathVariable String name)
+    {   userService.ensureAdmin();
         return userService.deleteUser(name);
     }
 
     @PostMapping("/forgot-password/{name}")
     public String forgotUserPassword(@PathVariable String name){
-        //userService.ensureUser();
+        userService.ensureUser();
         return userService.forgetPassword(name);
     }
     @GetMapping("/Password-Reset")

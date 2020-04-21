@@ -10,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.File;
 import java.util.*;
 
 @Entity
@@ -18,22 +19,23 @@ import java.util.*;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    protected Integer id;
     @NotNull(message = "name cannot be empty")
     private String name;
     private Date dob;
     //    private String confirmPassword;
     @NotNull
-    private String firstName;
+    protected String firstName;
     @Email
     private String email;
     private String lastName;
     private String gender;
     private Integer age;
+    @NotNull(message = "Password Cannot Be Null")
     private String password;
+    File profileImage = new File("/static/image1.jpg");
     private boolean enabled=false;
     private boolean deleted=false;
-    @JsonIgnore
     private Integer failedAttempts=0;
     @ElementCollection(fetch = FetchType.EAGER)
     List<String> authoritiesList;

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordValidator {
     //error message
-    public String message() default "Week Password";
+    public String message() default "Weak Password";
     //represents group of constraints
     public Class<?>[] groups() default {};
     //represents additional information about annotation

@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.File;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@EntityListeners(AuditingEntityListener.class)
 @DiscriminatorColumn(name = "Category",discriminatorType = DiscriminatorType.STRING)
 public class Product {
     @Id
@@ -29,25 +31,24 @@ public class Product {
     private Boolean isActive=false;
     private File productImage;
     private Integer price;
+    private Integer sellerId;
     private JSONObject metadata;
 
     @ElementCollection
     private List<Integer> otherVariationsId;
 
-//    @Column(name = "created_date",nullable = false,updatable =false)
-//    @CreatedDate
-//    private Date createdDate;
-//
-//    @Column(name = "modified_date")
-//    @LastModifiedDate
-//    private Date modifiedDate;
-//
-//    @Column(name = "modified_by")
-//    @LastModifiedBy
-//    private String modifiedBy;
+    @Column(name = "created_date",nullable = false,updatable =false)
+    @CreatedDate
+    private Date createdDate;
 
-    @ManyToOne
-    private Seller seller;
+    @Column(name = "modified_date")
+    @LastModifiedDate
+    private Date modifiedDate;
+
+
+
+//    @ManyToOne
+//    private Seller seller;
 
     @OneToMany(cascade = CascadeType.ALL)
     public List<Reviews> reviews;
@@ -78,14 +79,6 @@ public class Product {
 
     public String getBrand() {
         return brand;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
     }
 
     public void setBrand(String brand) {
@@ -172,27 +165,29 @@ public class Product {
         this.productImage = productImage;
     }
 
-//    public Date getCreatedDate() {
-//        return createdDate;
-//    }
-//
-//    public void setCreatedDate(Date createdDate) {
-//        this.createdDate = createdDate;
-//    }
-//
-//    public Date getModifiedDate() {
-//        return modifiedDate;
-//    }
-//
-//    public void setModifiedDate(Date modifiedDate) {
-//        this.modifiedDate = modifiedDate;
-//    }
-//
-//    public String getModifiedBy() {
-//        return modifiedBy;
-//    }
-//
-//    public void setModifiedBy(String modifiedBy) {
-//        this.modifiedBy = modifiedBy;
-//    }
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+
+
+    public Integer getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Integer sellerId) {
+        this.sellerId = sellerId;
+    }
 }

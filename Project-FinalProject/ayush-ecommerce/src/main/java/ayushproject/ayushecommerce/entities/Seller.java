@@ -6,20 +6,20 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("Seller")
 public class Seller extends User {
-        private Integer sellerId;
+   //     private Integer sellerId;
         private Integer GST_No;
         @Embedded
         private Address address;
         @OneToMany(cascade = CascadeType.ALL)
         private List<Product> products;
 
-    public Integer getSellerId() {
-            return sellerId;
-        }
-
-        public void setSellerId(Integer sellerId) {
-            this.sellerId = sellerId;
-        }
+//    public Integer getSellerId() {
+//            return sellerId;
+//        }
+//
+//        public void setSellerId(Integer sellerId) {
+//            this.sellerId = sellerId;
+//        }
 
         public Integer getGST_No() {
             return GST_No;
@@ -48,7 +48,14 @@ public class Seller extends User {
 
 
 
+    @Override
+    public String toString() {
+        return "Seller{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                '}';
     }
+}
 
 
 

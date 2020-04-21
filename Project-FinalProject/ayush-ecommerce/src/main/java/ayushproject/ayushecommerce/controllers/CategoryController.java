@@ -34,7 +34,7 @@ public class CategoryController {
     public Iterable<CategoryDTO> leafCategories(){
         return categoryServices.leafnodeCategories();
     }
-    @GetMapping("/buyer/Category/{categoryId}")
+    @GetMapping("/customer/Category/{categoryId}")
     public CategoryFilterDTO CategoryFilter(@PathVariable Integer categoryId){
         return categoryServices.CategoryFilter(categoryId);
     }
