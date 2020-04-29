@@ -6,14 +6,19 @@ import ayushproject.ayushecommerce.entities.User;
 import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 
 @RestController
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    TokenStore tokenStore;
 
 
     @GetMapping("/users")
@@ -47,8 +52,8 @@ public class UserController {
         return userService.forgetPassword(name);
     }
     @GetMapping("/Password-Reset")
-    public String validateResetToken(@RequestParam("token") String verificationToken,@RequestParam("newPassword") String newPassword) {
-        return userService.validateResetToken(verificationToken,newPassword);
+    public String validateResetToken(@RequestParam("token") String verificationToken,@RequestParam("newPassword") String newPassword,@RequestParam("confirmPassword") String confirmPassword) {
+        return userService.validateResetToken(verificationToken,newPassword,confirmPassword);
     }
 
     @GetMapping("/Account-Activation")
@@ -74,18 +79,25 @@ public class UserController {
         return userService.disableUser(name);
     }
     @PostMapping("/doLogout")
-    public String doLogout(HttpServletRequest request){
-        return userService.logout(request);
+    public String logout(HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+            if (authHeader != null) {
+                String tokenValue = authHeader.replace("Bearer", "").trim();
+                OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
+                tokenStore.removeAccessToken(accessToken);
+            }
+        userService.ensureUser();
+        return "Logged out successfully";
     }
 
     @PostMapping("/Register/Seller")
-    public String addSeller(@RequestBody Seller user){
-        return userService.addSeller(user);
+    public String addSeller(@RequestBody Seller user,@RequestHeader(name = "Accept-Language", required = false) Locale locale){
+        return userService.addSeller(user,locale);
     }
 
     @PostMapping("/Register/Customer")
-    public String addCustomer(@RequestBody Customer user){
-        return userService.addCustomer(user);
+    public String addCustomer(@RequestBody Customer user,@RequestHeader(name = "Accept-Language", required = false) Locale locale){
+        return userService.addCustomer(user,locale);
     }
 
 

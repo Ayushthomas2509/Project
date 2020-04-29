@@ -23,7 +23,8 @@ public class User implements UserDetails {
     @NotNull(message = "name cannot be empty")
     private String name;
     private Date dob;
-    //    private String confirmPassword;
+    @Transient
+    private String confirmPassword;
     @NotNull(message = "First name cannot be null")
     protected String firstName;
     @Email
@@ -197,6 +198,11 @@ public class User implements UserDetails {
         return enabled;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
 
-
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 }

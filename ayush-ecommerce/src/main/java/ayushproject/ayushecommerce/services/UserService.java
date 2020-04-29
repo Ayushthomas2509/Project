@@ -9,6 +9,7 @@ import ayushproject.ayushecommerce.security.GrantAuthorityImpl;
 import ayushproject.ayushecommerce.security.PasswordValidatorClass;
 import ayushproject.ayushecommerce.security.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +26,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 @Component
@@ -48,6 +50,8 @@ public class UserService {
     PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
     @Autowired
     PasswordValidatorClass passwordValidatorClass;
+    @Autowired
+    private MessageSource messageSource;;
 
     @PreAuthorize("hasRole('ADMIN')")
     public boolean ensureAdmin(){return true;
@@ -102,7 +106,7 @@ public class UserService {
         }
     }
 
-    public String addSeller(Seller user){
+    public String addSeller(Seller user, Locale locale){
         if (userRepo.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("not found"); }
         passwordValidatorClass.setPassword(user.getPassword());
@@ -114,11 +118,14 @@ public class UserService {
         else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepo.save(user);
-            return "DONE";
+           // activateAccount(user.getName());
+            return messageSource.getMessage("seller.add.message", null, locale);
+
+
         }
     }
 
-    public String addCustomer(Customer user){
+    public String addCustomer(Customer user,Locale locale){
         if (userRepo.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("Customer Already Exsists");
         }
@@ -131,7 +138,7 @@ public class UserService {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepo.save(user);
                 activateAccount(user.getName());
-                return "Your Acoount Will Be Activated";
+                return messageSource.getMessage("customer.add.message",null,locale);
             }
 
 
@@ -198,7 +205,7 @@ public class UserService {
         return "Failed";
     }
 
-    public String validateResetToken(String verificationToken,String newPassword){
+    public String validateResetToken(String verificationToken,String newPassword,String confirmPassword){
         VerificationToken token=verificationTokenRepo.findByVerificationToken(verificationToken);
 
         if (token!=null){
@@ -209,9 +216,15 @@ public class UserService {
                 throw new WeakPasswordEx();
             }
             else {
-                user.setPassword(passwordEncoder.encode(newPassword));
-                userRepo.save(user);
-                return "PASSWORD UPDATED";
+                if (newPassword.equals(confirmPassword)) {
+                    user.setPassword(passwordEncoder.encode(newPassword));
+                    userRepo.save(user);
+                    return "PASSWORD UPDATED";
+                }
+                else {
+                    return "ConfirmPassword Dont Match";
+
+                }
             }
         }
         return "Invalid Token";
@@ -228,15 +241,7 @@ public class UserService {
         return "User Not Found";
     }
 
-    public String logout(HttpServletRequest request){
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null) {
-            String tokenValue = authHeader.replace("Bearer", "").trim();
-            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
-            tokenStore.removeAccessToken(accessToken);
-        }
-        return "Logged out successfully";
-    }
+
 
 
     public String disableUser(String name) {
