@@ -44,7 +44,6 @@ public class UserController {
 
     @PostMapping("/forgot-password/{name}")
     public String forgotUserPassword(@PathVariable String name){
-        userService.ensureUser();
         return userService.forgetPassword(name);
     }
     @GetMapping("/Password-Reset")
@@ -79,12 +78,12 @@ public class UserController {
         return userService.logout(request);
     }
 
-    @PostMapping("/users/addSeller")
+    @PostMapping("/Register/Seller")
     public String addSeller(@RequestBody Seller user){
         return userService.addSeller(user);
     }
 
-    @PostMapping("/users/addCustomer")
+    @PostMapping("/Register/Customer")
     public String addCustomer(@RequestBody Customer user){
         return userService.addCustomer(user);
     }

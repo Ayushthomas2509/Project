@@ -24,7 +24,7 @@ public class User implements UserDetails {
     private String name;
     private Date dob;
     //    private String confirmPassword;
-    @NotNull
+    @NotNull(message = "First name cannot be null")
     protected String firstName;
     @Email
     private String email;

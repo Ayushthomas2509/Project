@@ -19,16 +19,18 @@ CustomerService customerService;
 
 @GetMapping("/customers")
     public Iterable<Customer> viewAll(){
+    userService.ensureUser();
     return customerService.allCustomers();
 }
 
 @GetMapping("/customers/{name}")
     public Customer findByName(String name){
+    userService.ensureUser();
     return customerService.findAll(name);
 }
     @GetMapping("customers/{name}/viewAddress")
     public List<Address> viewAddress(@PathVariable String name)  {
-userService.ensureCustomer();
+     userService.ensureCustomer();
         return customerService.viewAdress(name);
     }
 
@@ -37,8 +39,6 @@ userService.ensureCustomer();
         userService.ensureCustomer();
         return customerService.addAddress(address,name);
     }
-
-
 
     @PutMapping("/customers/{name}/editAddress/{addressId}")
     public List<Address> editAddress(@PathVariable String name, @PathVariable Integer addressId, @RequestBody Address address) {
@@ -49,13 +49,13 @@ userService.ensureCustomer();
     @DeleteMapping("/customers/{name}/deleteAddress/{addressId}")
     public List<Address> deleteAddress(@PathVariable String name,@PathVariable Integer addressId) {
     userService.ensureCustomer();
-        return customerService.deleteAddress(addressId,name);
+    return customerService.deleteAddress(addressId,name);
     }
 
     @PutMapping("/customers/{name}/updatePassword")
     public String updatePassword(@PathVariable String name,@RequestParam String newPassword,@RequestParam String oldPassword) {
     userService.ensureCustomer();
-        return customerService.updatePassword(name,newPassword,oldPassword);
+    return customerService.updatePassword(name,newPassword,oldPassword);
     }
 
 }

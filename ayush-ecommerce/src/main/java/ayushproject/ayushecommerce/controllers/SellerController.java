@@ -19,13 +19,13 @@ public class SellerController {
 
     @GetMapping("sellers")
     public Iterable<Seller> viewAll(){
-        userService.ensureSeller();
+        userService.ensureUser();
         return sellerService.viewAll();
     }
 
     @GetMapping("/seller/{name}")
     public Seller findByName(@PathVariable String name){
-        userService.ensureSeller();
+        userService.ensureUser();
          return sellerService.findByName(name);
 
     }

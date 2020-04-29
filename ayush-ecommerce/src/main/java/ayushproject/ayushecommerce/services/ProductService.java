@@ -1,12 +1,15 @@
 package ayushproject.ayushecommerce.services;
 
+import ayushproject.ayushecommerce.dto.ProductDTO;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.entities.User;
 import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
 import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
 import ayushproject.ayushecommerce.exceptions.ProductNotFound;
+import ayushproject.ayushecommerce.exceptions.ProductNotFoundEx;
 import ayushproject.ayushecommerce.repo.ProductRepo;
 import ayushproject.ayushecommerce.repo.UserRepo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
@@ -28,6 +31,8 @@ public class ProductService {
     ProductRepo productRepo;
     @Autowired
     EmailService emailService;
+    @Autowired
+    ModelMapper modelMapper;
 
     public Iterable<Product> allProducts(){return productRepo.findAll();}
 
@@ -149,6 +154,18 @@ public class ProductService {
 
         }
         return similar;
+    }
+
+    public ProductDTO findProductDTO(Integer productId) {
+        Product product=productRepo.findById(productId).get();
+        if (product == null) {
+            throw new ProductNotFoundEx("Invalid product Id "+ productId);
+        }
+        else {
+            ProductDTO productDTO = modelMapper.map(product,ProductDTO.class);
+            productDTO.setMetadataDTO(product.getMetadata());
+            return productDTO;
+        }
     }
 
 

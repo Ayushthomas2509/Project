@@ -1,6 +1,5 @@
 package ayushproject.ayushecommerce.services;
 
-//import ayushproject.ayushecommerce.entities.ApplicationUser;
 import ayushproject.ayushecommerce.entities.Customer;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;

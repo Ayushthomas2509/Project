@@ -40,17 +40,17 @@ public class OrderController {
     }
     @PostMapping("/respondOrder/{orderId}")
     public String respondOnOrder(@PathVariable Integer orderId, @RequestParam STATUS status){
-        //userService.ensureSeller();
+        userService.ensureSeller();
         return orderServices.respondOnOrder(orderId,status);
     }
     @PostMapping("/respondReturn/{orderId}")
     public String respondReturn(@PathVariable Integer orderId, @RequestParam STATUS status){
-        //userService.ensureSeller();
+        userService.ensureSeller();
         return orderServices.respondReturn(orderId,status);
     }
     @PostMapping("/changeStatus/{orderId}")
     public String changeStatus(@PathVariable Integer orderId, @RequestParam STATUS status){
-        //userService.ensureAdmin();
+        userService.ensureAdmin();
         return orderServices.changeStatus(orderId,status);
     }
 }

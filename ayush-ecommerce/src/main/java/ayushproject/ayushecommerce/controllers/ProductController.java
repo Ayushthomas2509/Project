@@ -1,5 +1,6 @@
 package ayushproject.ayushecommerce.controllers;
 
+import ayushproject.ayushecommerce.dto.ProductDTO;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
 import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
@@ -31,7 +32,7 @@ public class ProductController {
 
     @PostMapping("/add-products/fashion")
     public String addProduct(@RequestBody Fashion fashion) {
-       // userService.ensureSeller();
+        userService.ensureSeller();
         return productService.addProduct(fashion);
     }
 
@@ -73,12 +74,14 @@ public class ProductController {
 
     @GetMapping("/enable-product/{id}")
     public String enableProduct(@PathVariable Integer id){
+        userService.ensureSeller();
         return productService.enableProduct(id);
     }
 
 
     @GetMapping("/disable-product/{id}")
     public String disableProduct(@PathVariable Integer id){
+        userService.ensureSeller();
         return productService.disableProduct(id);}
 
     @PutMapping("/products/{productId}/add-variation/{variationProductId}")
@@ -95,6 +98,11 @@ public class ProductController {
     @GetMapping("/products/{productId}/similar-products")
     public List<Product> findSimilarProduct(@PathVariable Integer productId){
         return productService.findSimilarProduct(productId);
+    }
+
+    @GetMapping("/productsDTO/{productId}")
+    public ProductDTO findProductDTO(@PathVariable Integer productId){
+        return productService.findProductDTO(productId);
     }
 
 
