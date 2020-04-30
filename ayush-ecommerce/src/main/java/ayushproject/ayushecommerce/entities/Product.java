@@ -29,10 +29,10 @@ public class Product {
     private String description;
     private Boolean isDeleted=false;
     private Boolean isActive=false;
-    private File productImage;
     private Integer price;
     private Integer sellerId;
     private JSONObject metadata;
+    private String productImage;
 
     @ElementCollection
     private List<Integer> otherVariationsId;
@@ -157,14 +157,6 @@ public class Product {
         this.otherVariationsId = otherVariationsId;
     }
 
-    public File getProductImage() {
-        return productImage;
-    }
-
-    public void setProductImage(File productImage) {
-        this.productImage = productImage;
-    }
-
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -175,6 +167,14 @@ public class Product {
 
     public Date getModifiedDate() {
         return modifiedDate;
+    }
+
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 
     public void setModifiedDate(Date modifiedDate) {
@@ -190,4 +190,5 @@ public class Product {
     public void setSellerId(Integer sellerId) {
         this.sellerId = sellerId;
     }
+
 }

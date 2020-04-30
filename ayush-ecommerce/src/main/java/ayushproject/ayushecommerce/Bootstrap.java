@@ -120,6 +120,7 @@ public class Bootstrap implements ApplicationRunner {
         phone.setWarranty("1 Year");
         phone.setType("Cellular Phone");
         phone.setPrice(100000);
+        phone.setProductImage("resources/Static/image1.jpg");
         productRepo.save(phone);
 
         Fashion shirt = new Fashion();
@@ -134,6 +135,7 @@ public class Bootstrap implements ApplicationRunner {
         shirt.setName("Shirt UCB");
         shirt.setActive(true);
         shirt.setPrice(5000);
+        shirt.setProductImage("resources/Static/image1.jpg");
         productRepo.save(shirt);
 
         Fashion shirt1 = new Fashion();

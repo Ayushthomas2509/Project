@@ -3,6 +3,7 @@ package ayushproject.ayushecommerce.services;
 import ayushproject.ayushecommerce.entities.Customer;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;
+import ayushproject.ayushecommerce.exceptions.ConfirmPasswordException;
 import ayushproject.ayushecommerce.exceptions.WeakPasswordEx;
 import ayushproject.ayushecommerce.repo.*;
 import ayushproject.ayushecommerce.security.GrantAuthorityImpl;
@@ -11,6 +12,7 @@ import ayushproject.ayushecommerce.security.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -70,6 +72,7 @@ public class UserService {
 
     @PreAuthorize("hasRole('CUSTOMER')||hasRole('ADMIN')")
     public boolean ensureCustomerOrAdmin(){return true;}
+
 
     public Iterable<User> allUsers(){return userRepo.findAll();}
 
@@ -180,6 +183,7 @@ public class UserService {
         }
         return "Failed";
     }
+
     public String validateActivationToken(String verificationToken) {
         VerificationToken token=verificationTokenRepo.findByVerificationToken(verificationToken);
         if (token != null) {
@@ -187,7 +191,7 @@ public class UserService {
             user.setFailedAttempts(0);
             user.setEnabled(true);
             userRepo.save(user);
-            sendMail(user,"Account-Activation");
+//            sendMail(user,"Account-Activation");
             return "Account Activated";
         }
         return "Invalid Token";
@@ -221,10 +225,7 @@ public class UserService {
                     userRepo.save(user);
                     return "PASSWORD UPDATED";
                 }
-                else {
-                    return "ConfirmPassword Dont Match";
-
-                }
+                else throw new ConfirmPasswordException("Password Dont Match");
             }
         }
         return "Invalid Token";

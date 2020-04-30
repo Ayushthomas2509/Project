@@ -1,13 +1,16 @@
 package ayushproject.ayushecommerce.entities;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class Address {
     private String housenumber;
     private String area;
     private String city;
+    @NotNull(message = "Cannot be null")
     private String state;
+    @NotNull(message = "Please Enter Pincode")
     private String pincode;
     private String country;
 

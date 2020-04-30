@@ -4,7 +4,10 @@ import ayushproject.ayushecommerce.entities.Customer;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;
 import ayushproject.ayushecommerce.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -20,9 +23,16 @@ public class UserController {
     @Autowired
     TokenStore tokenStore;
 
+    private static final Logger logger=LoggerFactory.getLogger(UserController.class);
+
 
     @GetMapping("/users")
+    //@Scheduled
     public Iterable<User> allUsers(){
+        logger.info("Method Accessed");
+        //logger.warn("Warning");
+        //logger.debug("Debugging Done");
+        logger.error("Error Message");
         userService.ensureAdmin();
         return userService.allUsers();
     }
