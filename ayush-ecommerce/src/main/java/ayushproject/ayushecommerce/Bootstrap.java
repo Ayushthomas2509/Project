@@ -51,6 +51,7 @@ public class Bootstrap implements ApplicationRunner {
         admin1.setAge(24);
         admin1.setAdminid(301);
         admin1.setGender("M");
+        admin1.setIs_active(true);
         admin1.setPassword(passwordEncoder.encode("Ayush@"));
         admin1.setName("ayushthomas09");
         admin1.setEmail("ayushthomas09@outlook.com");
@@ -69,13 +70,14 @@ public class Bootstrap implements ApplicationRunner {
         user1.setFirstName("Kartik");
         user1.setLastName("Kumar");
         user1.setName("KartikKumar25");
-        user1.setEmail("kartik.kumar@tothenew.com");
+        user1.setEmail("vinodthomas004@gmail.com");
         user1.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
         user1.setPassword(passwordEncoder.encode("Kartik@"));
         user1.setAddress(Arrays.asList(address));
         user1.setAge(21);
         user1.setGender("M");
         user1.setEnabled(true);
+        user1.setIs_active(true);
         userRepo.save(user1);
 
         Seller seller1 = new Seller();
@@ -84,6 +86,7 @@ public class Bootstrap implements ApplicationRunner {
         seller1.setPassword(passwordEncoder.encode("Abhi@"));
         seller1.setAuthoritiesList(Arrays.asList("ROLE_SELLER"));
         seller1.setAge(23);
+        seller1.setIs_active(true);
         seller1.setEmail("ayushthomas09@gmail.com");
         seller1.setName("FashionMarket");
         seller1.setAddress(address);

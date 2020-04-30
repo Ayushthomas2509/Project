@@ -24,6 +24,7 @@ public class User implements UserDetails {
     private String name;
     private Date dob;
     @Transient
+    @JsonIgnore
     private String confirmPassword;
     @NotNull(message = "First name cannot be null")
     protected String firstName;
@@ -161,7 +162,7 @@ public class User implements UserDetails {
         this.deleted = deleted;
     }
 
-    private Boolean is_active;
+    private Boolean is_active = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -195,7 +196,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return is_active;
     }
 
     public String getConfirmPassword() {

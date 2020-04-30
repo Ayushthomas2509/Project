@@ -13,9 +13,6 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        String encryptedPassword = passwordEncoder.encode("pass");
-        System.out.println("Trying To Authenticate User:::" + name);
-        System.out.println("Encrypted Password ::" + encryptedPassword);
         UserDetails userDetails=userService.loadUsername(name);
         return userDetails;
     }

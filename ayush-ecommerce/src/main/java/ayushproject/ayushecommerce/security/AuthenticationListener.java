@@ -3,6 +3,7 @@ package ayushproject.ayushecommerce.security;
 import ayushproject.ayushecommerce.entities.User;
 import ayushproject.ayushecommerce.repo.UserRepo;
 import ayushproject.ayushecommerce.services.EmailService;
+import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
@@ -25,6 +26,9 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    UserService userService;
 
 //    @Override
 //    public void onApplicationEvent(AbstractAuthenticationEvent appEvent) {
@@ -88,6 +92,12 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
                     mailMessage.setFrom("ADMIN");
                     mailMessage.setText("Your Account has been temporally blocked ");
                     emailService.sendEmail(mailMessage);
+                    SimpleMailMessage mailMessage1=new SimpleMailMessage();
+                    mailMessage1.setTo("ayush.thomas@tothenew.com");
+                    mailMessage1.setSubject("Regarding Activation");
+                    mailMessage1.setFrom("ADMIN");
+                    mailMessage1.setText("Hi Admin bhaiya "+username+" is locked.");
+                    emailService.sendEmail(mailMessage1);
 
                 } else {
                     user.setFailedAttempts(user.getFailedAttempts() + 1);

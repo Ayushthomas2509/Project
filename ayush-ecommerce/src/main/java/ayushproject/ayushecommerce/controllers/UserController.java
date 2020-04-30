@@ -30,8 +30,7 @@ public class UserController {
     //@Scheduled
     public Iterable<User> allUsers(){
         logger.info("Method Accessed");
-        //logger.warn("Warning");
-        //logger.debug("Debugging Done");
+        logger.warn("Warning");
         logger.error("Error Message");
         userService.ensureAdmin();
         return userService.allUsers();
@@ -40,7 +39,7 @@ public class UserController {
 
     @GetMapping("users/{name}")
     public User findUser(@PathVariable String name)
-    {     userService.ensureAdmin();
+    {     userService.ensureUser();
          return userService.findUser(name);
     }
 
