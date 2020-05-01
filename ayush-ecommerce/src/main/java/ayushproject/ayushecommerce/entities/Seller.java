@@ -1,6 +1,7 @@
 package ayushproject.ayushecommerce.entities;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,15 @@ public class Seller extends User {
 //
 //        public void setSellerId(Integer sellerId) {
 //            this.sellerId = sellerId;
+//        }
+
+//    public Seller(String firstName) {
+//        this.firstName= firstName;
+//    }
+//
+//        public Seller(List<String> authoritiesList) {
+//            setAuthoritiesList(Arrays.asList("ROLE_SELLER"));
+//            this.authoritiesList= authoritiesList;
 //        }
 
         public Integer getGST_No() {

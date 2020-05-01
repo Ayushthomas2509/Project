@@ -11,6 +11,9 @@ import ayushproject.ayushecommerce.security.PasswordValidatorClass;
 import ayushproject.ayushecommerce.security.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,10 +29,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class UserService {
@@ -74,7 +74,7 @@ public class UserService {
     public boolean ensureCustomerOrAdmin(){return true;}
 
 
-    public Iterable<User> allUsers(){return userRepo.findAll();}
+    public Iterable<User> allUsers(Integer offset, Integer size){return userRepo.allUsers(PageRequest.of(offset,size, Sort.Direction.ASC,"id"));}
 
     public User findUser(String name){return userRepo.findByname(name);}
 
@@ -120,8 +120,9 @@ public class UserService {
         }
         else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setAuthoritiesList(Arrays.asList("ROLE_SELLER"));
             userRepo.save(user);
-           // activateAccount(user.getName());
+            activateAccount(user.getName());
             return messageSource.getMessage("seller.add.message", null, locale);
 
 
@@ -139,6 +140,7 @@ public class UserService {
             }
             else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
                 userRepo.save(user);
                 activateAccount(user.getName());
                 return messageSource.getMessage("customer.add.message",null,locale);

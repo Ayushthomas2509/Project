@@ -7,6 +7,7 @@ import ayushproject.ayushecommerce.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -26,14 +27,14 @@ public class UserController {
     private static final Logger logger=LoggerFactory.getLogger(UserController.class);
 
 
-    @GetMapping("/users")
+    @GetMapping("/users/{offset}/{size}")
     //@Scheduled
-    public Iterable<User> allUsers(){
+    public Iterable<User> allUsers(@PathVariable Integer offset,@PathVariable Integer size){
         logger.info("Method Accessed");
         logger.warn("Warning");
         logger.error("Error Message");
         userService.ensureAdmin();
-        return userService.allUsers();
+        return userService.allUsers(offset,size);
     }
 
 

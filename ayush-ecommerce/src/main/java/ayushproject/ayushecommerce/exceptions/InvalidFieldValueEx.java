@@ -4,6 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-public class ConfirmPasswordException extends RuntimeException {
-    public ConfirmPasswordException(String not_a_match){System.err.println("Password Dont Match");}
+public class InvalidFieldValueEx extends RuntimeException {
+    public InvalidFieldValueEx(String errorMessage){super(errorMessage);}
 }

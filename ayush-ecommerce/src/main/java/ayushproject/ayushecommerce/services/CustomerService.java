@@ -3,6 +3,7 @@ package ayushproject.ayushecommerce.services;
 import ayushproject.ayushecommerce.entities.Address;
 import ayushproject.ayushecommerce.entities.Customer;
 import ayushproject.ayushecommerce.entities.User;
+import ayushproject.ayushecommerce.exceptions.ConfirmPasswordException;
 import ayushproject.ayushecommerce.exceptions.WeakPasswordEx;
 import ayushproject.ayushecommerce.repo.CustomerRepo;
 import ayushproject.ayushecommerce.repo.UserRepo;
@@ -80,7 +81,7 @@ public class CustomerService {
 
            }
        }
-           return "OLD PASSWORD DIDNT MATCH";
+           throw new ConfirmPasswordException("Password Dont Match");
 
 
    }

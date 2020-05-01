@@ -1,14 +1,17 @@
 package ayushproject.ayushecommerce.services;
 
 import ayushproject.ayushecommerce.dto.ProductDTO;
+import ayushproject.ayushecommerce.entities.CategoryFieldValues;
+import ayushproject.ayushecommerce.entities.CompositeKeyFieldValues;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.entities.User;
 import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
 import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
-import ayushproject.ayushecommerce.exceptions.ProductNotFound;
+import ayushproject.ayushecommerce.exceptions.InvalidFieldEx;
+import ayushproject.ayushecommerce.exceptions.InvalidFieldValueEx;
 import ayushproject.ayushecommerce.exceptions.ProductNotFoundEx;
-import ayushproject.ayushecommerce.repo.ProductRepo;
-import ayushproject.ayushecommerce.repo.UserRepo;
+import ayushproject.ayushecommerce.repo.*;
+import org.json.simple.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -33,97 +36,109 @@ public class ProductService {
     EmailService emailService;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    CategoryFieldRepo categoryFieldRepo;
+    @Autowired
+    CategoryFeildValueRepo categoryFeildValueRepo;
+    @Autowired
+    CategoryRepo categoryRepo;
 
-    public Iterable<Product> allProducts(){return productRepo.findAll();}
+    public Iterable<Product> allProducts() {
+        return productRepo.findAll();
+    }
 
 
-    public List<Product> perCategory(String category){return productRepo.perCategory(category);}
-    public List<User> allUsers(){return userRepo.allUsers();}
+    public List<Product> perCategory(String category) {
+        return productRepo.perCategory(category);
+    }
 
-    public String addProduct(Product product){
+    public String addProduct(Product product) {
         productRepo.save(product);
         User admin = userRepo.findById(1).get();
-        sendMail(admin,"Product Activation",product);
+        if (product.getQuantity() <= 0) {
+
+            throw new InvalidFieldEx("Quantity Should Be Entered");
+        }
+        sendMail(admin, "Product Activation", product);
         return "Product Added..";
     }
 
-    public Product findProduct(Integer productId){
-        Product product =productRepo.findById(productId).get();
-        if (productId == null){
-            throw new ProductNotFound("Invalid Product" + productId);
-        }
-        else {
+    public Product findProduct(Integer productId) {
+        Product product = productRepo.findById(productId).get();
+        if (productId == null) {
+            throw new ProductNotFoundEx("Invalid Product" + productId);
+        } else {
             return product;
         }
     }
 
-    public String editProduct(Product product){
+    public String editProduct(Product product) {
         productRepo.save(product);
         return "Product Updated";
     }
 
-    private void sendMail(User user,String subject,Product product) {
+    private void sendMail(User user, String subject, Product product) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject(subject);
         mailMessage.setFrom("Admin_Ayush");
-        mailMessage.setText("To complete the "+subject+" process, please click here: "
-                + "http://localhost:8080/Enable-product/"+product.getId()+"\n"
-                +"Product Details \n"
-                +"Product Name "+product.getName()
-                +"Product Description "+product.getDescription());
+        mailMessage.setText("To complete the " + subject + " process, please click here: "
+                + "http://localhost:8080/Enable-product/" + product.getId() + "\n"
+                + "Product Details \n"
+                + "Product Name " + product.getName()
+                + "Product Description " + product.getDescription());
 
         emailService.sendEmail(mailMessage);
     }
 
-    public String removeProduct(Integer productId){
-        Product product=(productRepo.findById(productId).get());
+    public String removeProduct(Integer productId) {
+        Product product = (productRepo.findById(productId).get());
         product.setDeleted(true);
         productRepo.save(product);
         return "Product deleted";
     }
 
-    public String enableProduct(Integer productId){
+    public String enableProduct(Integer productId) {
         Product product = findProduct(productId);
         product.setActive(true);
         return "Product Activated";
     }
 
-    public String editElectronicsProduct(@PathVariable Integer id, @RequestBody Map<String , Object> fields){
+    public String editElectronicsProduct(@PathVariable Integer id, @RequestBody Map<String, Object> fields) {
         Product product = productRepo.findById(id).get();
 //        Map Key is the field name , v is value
         fields.forEach((k, v) -> {
-            Field field= ReflectionUtils.findField(Electronics.class,k);
+            Field field = ReflectionUtils.findField(Electronics.class, k);
             field.setAccessible(true);
-            ReflectionUtils.setField(field,product,v);
+            ReflectionUtils.setField(field, product, v);
         });
         productRepo.save(product);
         return "PRODUCT UPDATED";
 
     }
 
-    public String editFashionProduct(@PathVariable Integer id, @RequestBody Map<String , Object> fields){
+    public String editFashionProduct(@PathVariable Integer id, @RequestBody Map<String, Object> fields) {
         Product product = productRepo.findById(id).get();
 //        Map Key is the field name , v is value
         fields.forEach((k, v) -> {
-            Field field= ReflectionUtils.findField(Fashion.class,k);
+            Field field = ReflectionUtils.findField(Fashion.class, k);
             field.setAccessible(true);
-            ReflectionUtils.setField(field,product,v);
+            ReflectionUtils.setField(field, product, v);
         });
         productRepo.save(product);
         return "PRODUCT UPDATED";
 
     }
 
-    public String disableProduct(Integer productId){
+    public String disableProduct(Integer productId) {
         Product product = findProduct(productId);
         product.setActive(false);
         return "Product De-Activated";
     }
 
     public String addProductVariation(Integer productId, Integer variationProductId) {
-        Product product=findProduct(productId);
-        List <Integer> variationList=product.getOtherVariationsId();
+        Product product = findProduct(productId);
+        List<Integer> variationList = product.getOtherVariationsId();
         variationList.add(variationProductId);
         product.setOtherVariationsId(variationList);
         productRepo.save(product);
@@ -131,23 +146,23 @@ public class ProductService {
     }
 
     public List<Product> findAllProductVariations(Integer productId) {
-        Product product=findProduct(productId);
-        List<Product> variations=new ArrayList<>();
-        List <Integer> variationList=product.getOtherVariationsId();
-        Iterator<Integer> variationIterator= variationList.iterator();
+        Product product = findProduct(productId);
+        List<Product> variations = new ArrayList<>();
+        List<Integer> variationList = product.getOtherVariationsId();
+        Iterator<Integer> variationIterator = variationList.iterator();
         while (variationIterator.hasNext()) {
             variations.add(productRepo.findById(variationIterator.next()).get());
         }
         return variations;
     }
 
-    public List<Product> findSimilarProduct(Integer productId){
-        List<Product> similar=new ArrayList<>();
-        Product product=findProduct(productId);
-        Iterator<Product> productIterator= productRepo.findAll().iterator();
+    public List<Product> findSimilarProduct(Integer productId) {
+        List<Product> similar = new ArrayList<>();
+        Product product = findProduct(productId);
+        Iterator<Product> productIterator = productRepo.findAll().iterator();
         while (productIterator.hasNext()) {
-            Product currentProduct=productIterator.next();
-            if (currentProduct.getCategoryId()==product.getCategoryId()){
+            Product currentProduct = productIterator.next();
+            if (currentProduct.getCategoryId() == product.getCategoryId()) {
 
                 similar.add(currentProduct);
             }
@@ -157,19 +172,22 @@ public class ProductService {
     }
 
     public ProductDTO findProductDTO(Integer productId) {
-        Product product=productRepo.findById(productId).get();
+        Product product = productRepo.findById(productId).get();
         if (product == null) {
-            throw new ProductNotFoundEx("Invalid product Id "+ productId);
-        }
-        else {
-            ProductDTO productDTO = modelMapper.map(product,ProductDTO.class);
+            throw new ProductNotFoundEx("Invalid product Id " + productId);
+        } else {
+            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
             productDTO.setMetadataDTO(product.getMetadata());
             return productDTO;
         }
+
+
+
     }
-
-
-
-
-
 }
+
+
+
+
+
+

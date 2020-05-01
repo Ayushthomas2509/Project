@@ -1,6 +1,9 @@
 package ayushproject.ayushecommerce.entities;
 
+import ayushproject.ayushecommerce.security.GrantAuthorityImpl;
+
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 @Entity
 @DiscriminatorValue("Customer")
@@ -14,8 +17,19 @@ public class Customer extends  User{
     @OneToMany
     private List<Product> products;
 
+//    public Customer(String firstName) {
+//        this.firstName= firstName;
+//    }
+//
+//    public Customer(List<String> authoritiesList) {
+//        setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
+//        this.authoritiesList= authoritiesList;
+//    }
+
     @OneToMany
     private List<Orders> orders;
+
+
 
     public Integer getCustid() {
         return custid;

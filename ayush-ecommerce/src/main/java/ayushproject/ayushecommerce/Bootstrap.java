@@ -71,7 +71,7 @@ public class Bootstrap implements ApplicationRunner {
         user1.setLastName("Kumar");
         user1.setName("KartikKumar25");
         user1.setEmail("vinodthomas004@gmail.com");
-        user1.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
+       user1.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
         user1.setPassword(passwordEncoder.encode("Kartik@"));
         user1.setAddress(Arrays.asList(address));
         user1.setAge(21);
@@ -81,7 +81,7 @@ public class Bootstrap implements ApplicationRunner {
         userRepo.save(user1);
 
         Seller seller1 = new Seller();
-        seller1.setFirstName("Abhi");
+       seller1.setFirstName("Abhi");
         seller1.setLastName("Thomas");
         seller1.setPassword(passwordEncoder.encode("Abhi@"));
         seller1.setAuthoritiesList(Arrays.asList("ROLE_SELLER"));

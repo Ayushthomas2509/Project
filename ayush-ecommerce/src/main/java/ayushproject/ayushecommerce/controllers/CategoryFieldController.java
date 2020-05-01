@@ -14,7 +14,9 @@ public class CategoryFieldController {
     CategoryFieldServices categoryFieldServices;
 
     @GetMapping("/category-fields")
-    public Iterable<CategoryField> findAll(){return categoryFieldServices.findAll();}
+    public Iterable<CategoryField> findAll(){
+
+        return categoryFieldServices.findAll();}
 
     @PostMapping("/add/category-field")
     public String addCategory(@RequestParam Integer categoryId,@RequestParam String value,@RequestParam String name){

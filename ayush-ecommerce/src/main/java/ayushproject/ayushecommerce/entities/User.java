@@ -29,6 +29,7 @@ public class User implements UserDetails {
     @NotNull(message = "First name cannot be null")
     protected String firstName;
     @Email
+    @Column(unique = true)
     private String email;
     private String lastName;
     private String gender;
@@ -39,6 +40,7 @@ public class User implements UserDetails {
     private boolean enabled=false;
     private boolean deleted=false;
     private Integer failedAttempts=0;
+    @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
     List<String> authoritiesList;
     @ElementCollection

@@ -19,13 +19,13 @@ CustomerService customerService;
 
 @GetMapping("/customers")
     public Iterable<Customer> viewAll(){
-    userService.ensureUser();
+    userService.ensureAdmin();
     return customerService.allCustomers();
 }
 
 @GetMapping("/customers/{name}")
     public Customer findByName(String name){
-    userService.ensureUser();
+    userService.ensureCustomer();
     return customerService.findAll(name);
 }
     @GetMapping("customers/{name}/viewAddress")

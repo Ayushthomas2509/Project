@@ -3,9 +3,9 @@ package ayushproject.ayushecommerce.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ProductNotFound extends RuntimeException {
-    public ProductNotFound(String errorMessage){
+@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+public class InvalidFieldEx extends RuntimeException {
+    public InvalidFieldEx(String errorMessage){
         super(errorMessage);
     }
 }
