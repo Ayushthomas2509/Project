@@ -26,7 +26,7 @@ CustomerService customerService;
 @GetMapping("/customers/{name}")
     public Customer findByName(String name){
     userService.ensureCustomer();
-    return customerService.findAll(name);
+    return customerService.myProfile(name);
 }
     @GetMapping("customers/{name}/viewAddress")
     public List<Address> viewAddress(@PathVariable String name)  {

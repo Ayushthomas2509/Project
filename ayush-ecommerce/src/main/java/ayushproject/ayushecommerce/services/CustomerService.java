@@ -34,7 +34,7 @@ public class CustomerService {
        return customerRepo.findAll();
    }
 
-   public Customer findAll(String name){
+   public Customer myProfile(String name){
        return customerRepo.findByname(name);
    }
 

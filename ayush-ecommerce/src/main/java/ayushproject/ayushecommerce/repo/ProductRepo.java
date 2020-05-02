@@ -1,5 +1,6 @@
 package ayushproject.ayushecommerce.repo;
 
+import ayushproject.ayushecommerce.entities.Category;
 import ayushproject.ayushecommerce.entities.Product;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,11 +12,13 @@ import java.util.List;
 public interface ProductRepo extends CrudRepository<Product,Integer> {
 
     @Query("from Product where category=:category")
-    List<Product> perCategory(@Param("category")String category);
+    List<Product> perCategory(@Param("category")Category category);
 
     @Query("from Product where sellerId=:sellerId")
     List<Product> perSellerProducts(@Param("sellerId") Integer sellerId);
 
-    @Query(value = "select brand, price from product where category=:category",nativeQuery = true)
-    List<Object[]> findByCategory(@Param("category") String category);
+//    @Query(value = "select brand, price from product where category=:category",nativeQuery = true)
+    List<Product> findByCategory(Category category);
+
+    List<Product> findByName(String name);
 }

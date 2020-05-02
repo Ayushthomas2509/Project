@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+//@Inheritance(strategy = InheritanceType.JOINED)
 @EntityListeners(AuditingEntityListener.class)
-@DiscriminatorColumn(name = "Category",discriminatorType = DiscriminatorType.STRING)
+//@DiscriminatorColumn(name = "Category",discriminatorType = DiscriminatorType.STRING)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
@@ -24,13 +24,12 @@ public class Product {
     private Integer quantity;
     @Enumerated(EnumType.STRING)
     private In_Stock inStock;
-    private Integer categoryId;
+//    private Integer categoryId;
     private String description;
     private Boolean isDeleted=false;
     private Boolean isActive=false;
     private Integer price;
     private Integer sellerId;
-    //    private JSONObject metadata;
     @Convert(converter = HashMapConverter.class)
     @Column(columnDefinition = "json")
     private Map<String,String> metaData;
@@ -47,7 +46,9 @@ public class Product {
     @LastModifiedDate
     private Date modifiedDate;
 
-
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
 //    @ManyToOne
 //    private Seller seller;
@@ -143,14 +144,6 @@ public class Product {
         this.metaData = metaData;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public List<Integer> getOtherVariationsId() {
         return otherVariationsId;
     }
@@ -193,4 +186,12 @@ public class Product {
         this.sellerId = sellerId;
     }
 
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

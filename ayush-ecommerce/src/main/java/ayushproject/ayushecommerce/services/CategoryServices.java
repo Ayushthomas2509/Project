@@ -5,6 +5,7 @@ import ayushproject.ayushecommerce.dto.CategoryFilterDTO;
 import ayushproject.ayushecommerce.entities.Category;
 import ayushproject.ayushecommerce.entities.CategoryFieldValues;
 import ayushproject.ayushecommerce.entities.Product;
+import ayushproject.ayushecommerce.exceptions.ProductNotFoundException;
 import ayushproject.ayushecommerce.repo.CategoryFeildValueRepo;
 import ayushproject.ayushecommerce.repo.CategoryFieldRepo;
 import ayushproject.ayushecommerce.repo.CategoryRepo;
@@ -39,20 +40,9 @@ public class CategoryServices {
         return categoryRepo.findAll(paging);
     }
 
-    public String addCategory(String name, Integer parentCategoryId) {
-        if (categoryRepo.findByName(name)!=null) {
-            return "Category already exsists";
-        }
-        Category category = new Category(name, parentCategoryId);
-        if (parentCategoryId != null) {
-            Iterator<Product> productIterator = productRepo.findAll().iterator();
-            while (productIterator.hasNext()) {
-                Product product = productIterator.next();
-                if (product.getCategoryId() == parentCategoryId) {
-                    return "Product Category Is Already in use";
-                }
-            }
-            category.setParentCategory(categoryRepo.findById(parentCategoryId).get());
+    public String addCategory(Category category) {
+        if (categoryRepo.findByName(category.getName())!=null) {
+            throw new ProductNotFoundException("Category already exists");
         }
         categoryRepo.save(category);
         return "Category Saved";
@@ -65,7 +55,8 @@ public class CategoryServices {
         Iterator<Category> categoryIterator = categoryRepo.findAll().iterator();
         while (categoryIterator.hasNext()) {
             Category currentCategory = categoryIterator.next();
-            if (currentCategory.getParentId() == categoryId) {
+//            System.out.println(categoryId+">>>>>>>>>>);
+            if (currentCategory.getParentCategory() == category) {
                 categoryList.add(currentCategory);
             }
         }
@@ -110,17 +101,17 @@ public class CategoryServices {
         Integer min = Integer.MAX_VALUE;
         Set<String> brandsList = new HashSet<>();
         Optional<Category> category=categoryRepo.findById(categoryId);
-        System.out.println("\n\n\n\n"+ category.get().getName());
-        Optional<Category> parentCategory = categoryRepo.findById(category.get().getParentId());
-        System.out.println("\n\n\n\n"+ parentCategory.get().getName());
-        List<Object[]> productIterator = productRepo.findByCategory(parentCategory.get().getName());
-        System.out.println(productIterator.get(0)[1]);
-        for (Object[] objects: productIterator){
-                brandsList.add((String) objects[0]);
-                if ((Integer)objects[1] <= min)
-                    min = (Integer) objects[1];
-                if ((Integer)objects[1] >= max)
-                    max =  (Integer) objects[1];
+//        System.out.println("\n\n\n\n"+ category.get().getName());
+//        Optional<Category> parentCategory = categoryRepo.findByParentCategory(category.get().getParentCategory());
+//        System.out.println("\n\n\n\n"+ parentCategory.get().getName());
+        List<Product> product = productRepo.findByCategory(category.get());
+        for (Product objects: product){
+            System.out.println(objects.getBrand());
+                brandsList.add(objects.getBrand());
+                if (objects.getPrice() <= min)
+                    min = objects.getPrice();
+                if (objects.getPrice() >= max)
+                    max =  objects.getPrice();
             }
         categoryFilterDTO.setCategoryFieldValues(categoryFieldValuesList);
         if (max>0)

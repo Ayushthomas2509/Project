@@ -32,10 +32,10 @@ public class CategoryController {
     }
 
     @PostMapping("/add-category")
-    public String addCategory(@RequestParam String name, @RequestParam(required = false) Integer parentCategoryId) {
+    public String addCategory(@RequestBody Category category) {
         logger.info("Category added");
         userService.ensureAdmin();
-        return categoryServices.addCategory(name,parentCategoryId);
+        return categoryServices.addCategory(category);
     }
 
     @PostMapping("/edit-category/{categoryId}")
@@ -46,7 +46,7 @@ public class CategoryController {
 
     @GetMapping("/seller/Category")
     public Iterable<CategoryDTO> leafCategories(){
-        userService.ensureSeller();
+        userService.ensureUser();
         return categoryServices.leafnodeCategories();
     }
     @GetMapping("/customer/Category/{categoryId}")

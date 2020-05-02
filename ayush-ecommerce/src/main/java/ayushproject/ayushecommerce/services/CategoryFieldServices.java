@@ -21,6 +21,7 @@ public class CategoryFieldServices {
         }
         else {
             CategoryField categoryField=new CategoryField();
+            categoryField.setName(name);
             categoryFieldRepo.save(categoryField);
             categoryFieldValuesServices.beforeCategoryFieldsValues(categoryId,categoryField.getId(),value);
             return "FILE SAVED";

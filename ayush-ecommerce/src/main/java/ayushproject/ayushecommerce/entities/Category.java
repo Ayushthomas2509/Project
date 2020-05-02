@@ -1,5 +1,7 @@
 package ayushproject.ayushecommerce.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,13 +11,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
-    private Integer parentId;
-    @OneToOne
+    @ManyToOne
     private Category parentCategory;
-    public Category(String name,Integer parentId){
-        this.name=name;
-        this.parentId=parentId;
-    }
 
     public Category() {
     }
@@ -36,14 +33,6 @@ public class Category {
         this.name = name;
     }
 
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
     public Category getParentCategory() {
         return parentCategory;
     }
@@ -51,4 +40,6 @@ public class Category {
     public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
     }
+
+
 }

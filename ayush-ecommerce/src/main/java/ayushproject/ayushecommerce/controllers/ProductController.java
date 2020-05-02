@@ -1,9 +1,10 @@
 package ayushproject.ayushecommerce.controllers;
 
 import ayushproject.ayushecommerce.dto.ProductDTO;
+import ayushproject.ayushecommerce.dto.VariationDto;
 import ayushproject.ayushecommerce.entities.Product;
-import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
-import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
+//import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
+//import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
 import ayushproject.ayushecommerce.services.ProductService;
 import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,33 +27,23 @@ public class ProductController {
     }
 
     @GetMapping("/products/{category}")
-    public List<Product> perCategory(@PathVariable String category){
+    public List<Product> perCategory(@PathVariable Integer category){
         return productService.perCategory(category);
     }
 
-    @PostMapping("/add-products/fashion")
-    public String addProduct(@RequestBody Fashion fashion) {
+    @PostMapping("/add-products")
+    public String addProduct(@RequestBody Product product) {
         userService.ensureSeller();
-        return productService.addProduct(fashion);
+        return productService.addProduct(product);
     }
 
-    @PostMapping("/add-products/electronics")
-    public String addProduct(@RequestBody Electronics electronics){
+
+    @PostMapping("/edit-products")
+    public String editProduct(@RequestBody Product product){
         userService.ensureSeller();
-        return productService.addProduct(electronics);
+        return productService.editProduct(product);
     }
 
-    @PostMapping("/edit-products/fashion")
-    public String editProduct(@RequestBody Fashion fashion){
-        userService.ensureSeller();
-        return productService.editProduct(fashion);
-    }
-
-    @PostMapping("/edit-products/electronics")
-    public String editProduct(@RequestBody Electronics electronics){
-        userService.ensureSeller();
-        return productService.editProduct(electronics);
-    }
 
     @DeleteMapping("/remove-products/{productId}")
     public String removeProduct(@PathVariable Integer productId) {
@@ -60,17 +51,12 @@ public class ProductController {
         return productService.removeProduct(productId);
     }
 
-    @PatchMapping("/edit-products/electronics/{id}")
-    public String editElectronicsProduct(@PathVariable Integer id, @RequestBody Map<String, Object> fields){
+    @PatchMapping("/edit-products/{id}")
+    public String editElectronicsProduct(@PathVariable Integer id, @RequestBody Product product){
         userService.ensureSeller();
-        return productService.editElectronicsProduct(id,fields);
+        return productService.editElectronicsProduct(id,product);
     }
 
-    @PatchMapping("/edit-products/fashion/{id}")
-    public String editFashionProduct(@PathVariable Integer id, @RequestBody Map<String, Object> fields){
-        userService.ensureSeller();
-        return productService.editFashionProduct(id,fields);
-    }
 
     @GetMapping("/enable-product/{id}")
     public String enableProduct(@PathVariable Integer id){
@@ -84,14 +70,14 @@ public class ProductController {
         userService.ensureSeller();
         return productService.disableProduct(id);}
 
-    @PutMapping("/products/{productId}/add-variation/{variationProductId}")
-    public String addProduct(@PathVariable Integer productId,@PathVariable Integer variationProductId) {
+    @PostMapping("/products/{productId}/add-variation")
+    public String addProduct(@PathVariable Integer productId,@RequestBody VariationDto variation) {
         userService.ensureSeller();
-        return productService.addProductVariation(productId,variationProductId);
+        return productService.addProductVariation(productId,variation);
     }
 
     @GetMapping("/products/{productId}/products-variations")
-    public List<Product> findAllProductVariations(@PathVariable Integer productId){
+    public List<VariationDto> findAllProductVariations(@PathVariable Integer productId){
         return productService.findAllProductVariations(productId);
     }
 
