@@ -36,7 +36,6 @@ public class User implements UserDetails {
     private Integer age;
     @NotNull(message = "Password Cannot Be Null")
     private String password;
-    File profileImage = new File("/static/image1.jpg");
     private boolean enabled=false;
     private boolean deleted=false;
     private Integer failedAttempts=0;

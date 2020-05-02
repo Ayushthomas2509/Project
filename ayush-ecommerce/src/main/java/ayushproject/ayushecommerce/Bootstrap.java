@@ -19,6 +19,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +74,8 @@ public class Bootstrap implements ApplicationRunner {
         user1.setLastName("Kumar");
         user1.setName("KartikKumar25");
         user1.setEmail("vinodthomas004@gmail.com");
-       user1.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
+        user1.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
+        File profilePic = new File("Static/image1.jpg");
         user1.setPassword(passwordEncoder.encode("Kartik@"));
         user1.setAddress(Arrays.asList(address));
         user1.setAge(21);
