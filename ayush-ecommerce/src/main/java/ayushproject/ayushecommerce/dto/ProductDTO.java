@@ -2,6 +2,8 @@ package ayushproject.ayushecommerce.dto;
 
 import org.json.simple.JSONObject;
 
+import java.util.Map;
+
 public class ProductDTO {
     private Integer id;
     private String name;
@@ -11,7 +13,16 @@ public class ProductDTO {
     private Integer quantity;
     private Integer price;
     private Integer sellerId;
-    private JSONObject metadataDTO;
+//    private JSONObject metadataDTO;
+    private Map<String,String> metaData;
+
+    public Map<String, String> getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(Map<String, String> metaData) {
+        this.metaData = metaData;
+    }
 
     public Integer getId() {
         return id;
@@ -77,11 +88,4 @@ public class ProductDTO {
         this.sellerId = sellerId;
     }
 
-    public JSONObject getMetadataDTO() {
-        return metadataDTO;
-    }
-
-    public void setMetadataDTO(JSONObject metadataDTO) {
-        this.metadataDTO = metadataDTO;
-    }
 }

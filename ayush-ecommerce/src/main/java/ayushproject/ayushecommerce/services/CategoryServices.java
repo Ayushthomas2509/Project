@@ -9,14 +9,12 @@ import ayushproject.ayushecommerce.repo.CategoryFeildValueRepo;
 import ayushproject.ayushecommerce.repo.CategoryFieldRepo;
 import ayushproject.ayushecommerce.repo.CategoryRepo;
 import ayushproject.ayushecommerce.repo.ProductRepo;
-import ayushproject.ayushecommerce.security.PasswordValidatorClass;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -34,6 +32,7 @@ public class CategoryServices {
     ProductRepo productRepo;
     @Autowired
     private ModelMapper modelMapper;
+    //private java.lang.Object Object;
 
     public Iterable<Category> findAll() {
         Pageable paging = PageRequest.of(0, 10, Sort.by("name").ascending());
@@ -110,20 +109,26 @@ public class CategoryServices {
         Integer max = Integer.MIN_VALUE;
         Integer min = Integer.MAX_VALUE;
         Set<String> brandsList = new HashSet<>();
-        Iterator<Product> productIterator = productRepo.findAll().iterator();
-        while (productIterator.hasNext()) {
-            Product currentProduct = productIterator.next();
-            if (currentProduct.getCategoryId() == categoryId) {
-                brandsList.add(currentProduct.getBrand());
-                if (currentProduct.getPrice() <= min)
-                    min = currentProduct.getPrice();
-                if (currentProduct.getPrice() >= max)
-                    max = currentProduct.getPrice();
+        Optional<Category> category=categoryRepo.findById(categoryId);
+        System.out.println("\n\n\n\n"+ category.get().getName());
+        Optional<Category> parentCategory = categoryRepo.findById(category.get().getParentId());
+        System.out.println("\n\n\n\n"+ parentCategory.get().getName());
+        List<Object[]> productIterator = productRepo.findByCategory(parentCategory.get().getName());
+        System.out.println(productIterator.get(0)[1]);
+        for (Object[] objects: productIterator){
+                brandsList.add((String) objects[0]);
+                if ((Integer)objects[1] <= min)
+                    min = (Integer) objects[1];
+                if ((Integer)objects[1] >= max)
+                    max =  (Integer) objects[1];
             }
-        }
         categoryFilterDTO.setCategoryFieldValues(categoryFieldValuesList);
-        categoryFilterDTO.setMaximumPrice(max);
-        categoryFilterDTO.setMinimumPrice(min);
+        if (max>0)
+            categoryFilterDTO.setMaximumPrice(max);
+        if(min<Integer.MAX_VALUE)
+            categoryFilterDTO.setMinimumPrice(min);
+
+
         categoryFilterDTO.setBrandsList(brandsList);
         return categoryFilterDTO;
 

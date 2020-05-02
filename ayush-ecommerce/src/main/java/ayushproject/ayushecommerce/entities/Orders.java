@@ -1,7 +1,6 @@
 package ayushproject.ayushecommerce.entities;
 
-import ayushproject.ayushecommerce.enums.STATUS;
-import org.springframework.data.relational.core.sql.In;
+import ayushproject.ayushecommerce.enums.Status;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,7 +12,7 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer orderid;
-    private STATUS  orderstatus;
+    private Status orderstatus;
     private Date orderdate;
     @Embedded
     private Address address;
@@ -34,11 +33,11 @@ public class Orders {
         this.orderid = orderid;
     }
 
-    public STATUS getOrderstatus() {
+    public Status getOrderstatus() {
         return orderstatus;
     }
 
-    public void setOrderstatus(STATUS orderstatus) {
+    public void setOrderstatus(Status orderstatus) {
         this.orderstatus = orderstatus;
     }
 

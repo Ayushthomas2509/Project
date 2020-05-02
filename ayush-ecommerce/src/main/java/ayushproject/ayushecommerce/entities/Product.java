@@ -1,16 +1,15 @@
 package ayushproject.ayushecommerce.entities;
 
-import ayushproject.ayushecommerce.enums.IN_STOCK;
+import ayushproject.ayushecommerce.enums.In_Stock;
 import org.json.simple.JSONObject;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -24,14 +23,17 @@ public class Product {
     private String brand;
     private Integer quantity;
     @Enumerated(EnumType.STRING)
-    private IN_STOCK inStock;
+    private In_Stock inStock;
     private Integer categoryId;
     private String description;
     private Boolean isDeleted=false;
     private Boolean isActive=false;
     private Integer price;
     private Integer sellerId;
-    private JSONObject metadata;
+    //    private JSONObject metadata;
+    @Convert(converter = HashMapConverter.class)
+    @Column(columnDefinition = "json")
+    private Map<String,String> metaData;
     private String productImage;
 
     @ElementCollection
@@ -93,11 +95,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public IN_STOCK getInStock() {
+    public In_Stock getInStock() {
         return inStock;
     }
 
-    public void setInStock(IN_STOCK inStock) {
+    public void setInStock(In_Stock inStock) {
         this.inStock = inStock;
     }
 
@@ -133,12 +135,12 @@ public class Product {
         this.price = price;
     }
 
-    public JSONObject getMetadata() {
-        return metadata;
+    public Map<String, String> getMetaData() {
+        return metaData;
     }
 
-    public void setMetadata(JSONObject metadata) {
-        this.metadata = metadata;
+    public void setMetaData(Map<String, String> metaData) {
+        this.metaData = metaData;
     }
 
     public Integer getCategoryId() {

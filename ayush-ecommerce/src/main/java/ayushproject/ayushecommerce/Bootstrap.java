@@ -3,9 +3,9 @@ package ayushproject.ayushecommerce;
 import ayushproject.ayushecommerce.entities.*;
 import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
 import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
-import ayushproject.ayushecommerce.enums.IN_STOCK;
+import ayushproject.ayushecommerce.enums.In_Stock;
 import ayushproject.ayushecommerce.repo.*;
-import ayushproject.ayushecommerce.security.PasswordValidatorClass;
+import ayushproject.ayushecommerce.security.PasswordValidator;
 import ayushproject.ayushecommerce.services.UserService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,8 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Component
@@ -31,7 +33,7 @@ public class Bootstrap implements ApplicationRunner {
     @Autowired
     UserService userService;
     @Autowired
-    PasswordValidatorClass passwordValidatorClass;
+    PasswordValidator passwordValidator;
 
     @Autowired
     CategoryFieldRepo categoryFieldRepo;
@@ -95,13 +97,13 @@ public class Bootstrap implements ApplicationRunner {
         seller1.setGender("M");
         userRepo.save(seller1);
 
-        passwordValidatorClass.setPassword(admin1.getPassword());
+        passwordValidator.setPassword(admin1.getPassword());
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        Set<ConstraintViolation<PasswordValidatorClass>> constraintViolations = validator.validate(passwordValidatorClass);
+        Set<ConstraintViolation<PasswordValidator>> constraintViolations = validator.validate(passwordValidator);
 
         if (constraintViolations.size() > 0) {
-            for (ConstraintViolation<PasswordValidatorClass> violation : constraintViolations) {
+            for (ConstraintViolation<PasswordValidator> violation : constraintViolations) {
                 System.out.println(violation.getMessage());
             }
         } else {
@@ -116,7 +118,7 @@ public class Bootstrap implements ApplicationRunner {
         phone.setDisplay("5.1 Inch OLED");
         phone.setName("Iphone 11 Pro Max");
         phone.setDescription("Class Efficinet");
-        phone.setInStock(IN_STOCK.Yes);
+        phone.setInStock(In_Stock.Yes);
         phone.setQuantity(10);
         phone.setSellerId(3);
         phone.setStorage("256 gb");
@@ -134,7 +136,7 @@ public class Bootstrap implements ApplicationRunner {
         shirt.setMaterial("Cotton 100%");
         shirt.setQuantity(15);
         shirt.setSellerId(3);
-        shirt.setInStock(IN_STOCK.Yes);
+        shirt.setInStock(In_Stock.Yes);
         shirt.setName("Shirt UCB");
         shirt.setActive(true);
         shirt.setPrice(5000);
@@ -149,15 +151,19 @@ public class Bootstrap implements ApplicationRunner {
         shirt1.setMaterial("Cotton 100%");
         shirt1.setQuantity(15);
         shirt1.setSellerId(3);
-        shirt1.setInStock(IN_STOCK.Yes);
+        shirt1.setInStock(In_Stock.Yes);
         shirt1.setName("Shirt POLO");
         shirt1.setActive(true);
         shirt1.setPrice(4000);
         productRepo.save(shirt1);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Storage", 128);
-        phone.setMetadata(jsonObject);
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("Storage", 128);
+//        phone.setMetadata(jsonObject);
+        Map<String,String> metadata1=new HashMap<>();
+        metadata1.put("Storage","128 GB");
+//        metadata1.put("Processor","Quad Core");
+        phone.setMetaData(metadata1);
 
         shirt.setOtherVariationsId(Arrays.asList(shirt.getId()));
         shirt1.setOtherVariationsId(Arrays.asList(shirt1.getId()));

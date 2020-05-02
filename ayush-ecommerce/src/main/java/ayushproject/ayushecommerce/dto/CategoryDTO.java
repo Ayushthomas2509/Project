@@ -10,9 +10,7 @@ public class CategoryDTO {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
-    @OneToOne
     private Category parentCategory;
-    @OneToMany
     private List<Category> immediateChild;
 
     public CategoryDTO(Integer id, String name, Category parentCategory, List<Category> immediateChild) {

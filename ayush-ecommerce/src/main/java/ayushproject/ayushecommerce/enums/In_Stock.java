@@ -1,5 +1,5 @@
 package ayushproject.ayushecommerce.enums;
 
-public enum IN_STOCK {
+public enum In_Stock {
     Yes,No;
 }

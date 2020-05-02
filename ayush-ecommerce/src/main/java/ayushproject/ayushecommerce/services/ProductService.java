@@ -1,17 +1,13 @@
 package ayushproject.ayushecommerce.services;
 
 import ayushproject.ayushecommerce.dto.ProductDTO;
-import ayushproject.ayushecommerce.entities.CategoryFieldValues;
-import ayushproject.ayushecommerce.entities.CompositeKeyFieldValues;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.entities.User;
 import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
 import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
-import ayushproject.ayushecommerce.exceptions.InvalidFieldEx;
-import ayushproject.ayushecommerce.exceptions.InvalidFieldValueEx;
-import ayushproject.ayushecommerce.exceptions.ProductNotFoundEx;
+import ayushproject.ayushecommerce.exceptions.InvalidFieldException;
+import ayushproject.ayushecommerce.exceptions.ProductNotFoundException;
 import ayushproject.ayushecommerce.repo.*;
-import org.json.simple.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -57,7 +53,7 @@ public class ProductService {
         User admin = userRepo.findById(1).get();
         if (product.getQuantity() <= 0) {
 
-            throw new InvalidFieldEx("Quantity Should Be Entered");
+            throw new InvalidFieldException("Quantity Should Be Entered");
         }
         sendMail(admin, "Product Activation", product);
         return "Product Added..";
@@ -66,7 +62,7 @@ public class ProductService {
     public Product findProduct(Integer productId) {
         Product product = productRepo.findById(productId).get();
         if (productId == null) {
-            throw new ProductNotFoundEx("Invalid Product" + productId);
+            throw new ProductNotFoundException("Invalid Product" + productId);
         } else {
             return product;
         }
@@ -174,10 +170,10 @@ public class ProductService {
     public ProductDTO findProductDTO(Integer productId) {
         Product product = productRepo.findById(productId).get();
         if (product == null) {
-            throw new ProductNotFoundEx("Invalid product Id " + productId);
+            throw new ProductNotFoundException("Invalid product Id " + productId);
         } else {
             ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
-            productDTO.setMetadataDTO(product.getMetadata());
+            productDTO.setMetaData(product.getMetaData());
             return productDTO;
         }
 

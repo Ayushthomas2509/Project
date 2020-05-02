@@ -2,7 +2,7 @@ package ayushproject.ayushecommerce.services;
 
 import ayushproject.ayushecommerce.entities.Cart;
 import ayushproject.ayushecommerce.entities.Product;
-import ayushproject.ayushecommerce.enums.IN_STOCK;
+import ayushproject.ayushecommerce.enums.In_Stock;
 import ayushproject.ayushecommerce.repo.CartRepo;
 import ayushproject.ayushecommerce.repo.ProductRepo;
 import ayushproject.ayushecommerce.repo.UserRepo;
@@ -27,7 +27,7 @@ public class CartService {
         Iterator<Cart> cartIterator = cartRepo.findAll().iterator();
 
         Product product = productRepo.findById(productID).get();
-        if (product.getInStock() == IN_STOCK.Yes){
+        if (product.getInStock() == In_Stock.Yes){
             if (product.getQuantity()-quantity<0){
                 return "Not In Stock="+product.getQuantity();
             }
@@ -37,7 +37,7 @@ public class CartService {
                     currentCart.setQuantity(currentCart.getQuantity()+quantity);
                     product.setQuantity(product.getQuantity()-quantity);
                     if (product.getQuantity()<= 0){
-                        product.setInStock(IN_STOCK.No);
+                        product.setInStock(In_Stock.No);
                     }
                     productRepo.save(product);
                     cartRepo.save(currentCart);
@@ -52,7 +52,7 @@ public class CartService {
             cart.setQuantity(quantity);
             product.setQuantity(product.getQuantity()-quantity);
             if (product.getQuantity()<=0){
-                 product.setInStock(IN_STOCK.No);
+                 product.setInStock(In_Stock.No);
             }
             productRepo.save(product);
             cartRepo.save(cart);
@@ -87,7 +87,7 @@ public class CartService {
         currentCart.setQuantity(currentCart.getQuantity() - 1);
         product.setQuantity(product.getQuantity() + 1);
         if (product.getQuantity()>0){
-            product.setInStock(IN_STOCK.Yes);
+            product.setInStock(In_Stock.Yes);
         }
         if (currentCart.getQuantity()<0){
             cartRepo.delete(currentCart);

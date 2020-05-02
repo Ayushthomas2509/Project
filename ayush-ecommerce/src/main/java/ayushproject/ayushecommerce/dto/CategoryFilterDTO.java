@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 public class CategoryFilterDTO {
-    @ElementCollection
     private List<CategoryFieldValues> categoryFieldValues;
-    @ElementCollection
     private Set<String> brandsList;
-    private Integer maximumPrice;
-    private Integer minimumPrice;
+    private Integer maximumPrice=0;
+    private Integer minimumPrice=0;
 
     public List<CategoryFieldValues> getCategoryFieldValues() {
         return categoryFieldValues;

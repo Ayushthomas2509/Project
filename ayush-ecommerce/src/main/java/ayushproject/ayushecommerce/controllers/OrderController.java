@@ -1,7 +1,7 @@
 package ayushproject.ayushecommerce.controllers;
 
 import ayushproject.ayushecommerce.entities.Orders;
-import ayushproject.ayushecommerce.enums.STATUS;
+import ayushproject.ayushecommerce.enums.Status;
 import ayushproject.ayushecommerce.services.OrderServices;
 import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +39,17 @@ public class OrderController {
         return orderServices.returnOrder(orderId);
     }
     @PostMapping("/respondOrder/{orderId}")
-    public String respondOnOrder(@PathVariable Integer orderId, @RequestParam STATUS status){
+    public String respondOnOrder(@PathVariable Integer orderId, @RequestParam Status status){
         userService.ensureSeller();
         return orderServices.respondOnOrder(orderId,status);
     }
     @PostMapping("/respondReturn/{orderId}")
-    public String respondReturn(@PathVariable Integer orderId, @RequestParam STATUS status){
+    public String respondReturn(@PathVariable Integer orderId, @RequestParam Status status){
         userService.ensureSeller();
         return orderServices.respondReturn(orderId,status);
     }
     @PostMapping("/changeStatus/{orderId}")
-    public String changeStatus(@PathVariable Integer orderId, @RequestParam STATUS status){
+    public String changeStatus(@PathVariable Integer orderId, @RequestParam Status status){
         userService.ensureAdmin();
         return orderServices.changeStatus(orderId,status);
     }

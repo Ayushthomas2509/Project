@@ -1,20 +1,33 @@
 package ayushproject.ayushecommerce.security;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.springframework.stereotype.Component;
 
-@Constraint(validatedBy = PasswordValidatorClass.class)
-@Target( { ElementType.METHOD, ElementType.FIELD } )
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PasswordValidator {
-    //error message
-    public String message() default "Weak Password";
-    //represents group of constraints
-    public Class<?>[] groups() default {};
-    //represents additional information about annotation
-    public Class<? extends Payload>[] payload() default {};
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.constraints.Size;
+@Component
+public class PasswordValidator implements ConstraintValidator<PasswordValidatorAnnotation,String> {
+
+    public boolean isValid(String s, ConstraintValidatorContext cvc) {
+        boolean isCapital=s.matches( ".*[A-Z].*");
+        boolean isNonCapital=s.matches(  ".*[a-z].*");
+        boolean isNumeric=s.matches( ".*\\d.*");
+        boolean isSpecialChar=s.matches(".*[`@#_].*");
+        boolean result=isCapital&&isNonCapital&&isSpecialChar&&isNumeric;
+        return result;
+    }
+
+    @PasswordValidatorAnnotation
+    @Size(min = 8,max = 15)
+    private String password;
+    private String confirmPassword;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
+

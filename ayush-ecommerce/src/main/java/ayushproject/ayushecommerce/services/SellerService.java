@@ -4,11 +4,11 @@ import ayushproject.ayushecommerce.entities.Address;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;
-import ayushproject.ayushecommerce.exceptions.WeakPasswordEx;
+import ayushproject.ayushecommerce.exceptions.WeakPasswordException;
 import ayushproject.ayushecommerce.repo.ProductRepo;
 import ayushproject.ayushecommerce.repo.SellerRepo;
 import ayushproject.ayushecommerce.repo.UserRepo;
-import ayushproject.ayushecommerce.security.PasswordValidatorClass;
+import ayushproject.ayushecommerce.security.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +31,7 @@ public class SellerService {
     @Autowired
     ProductRepo productRepo;
     @Autowired
-    PasswordValidatorClass passwordValidatorClass;
+    PasswordValidator passwordValidator;
     PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     public Iterable<Seller> viewAll(){
@@ -52,9 +52,9 @@ public class SellerService {
     public String updatePassword(String newPassword,String oldPassword,String name){
         User user=userRepo.findByname(name);
         if(passwordEncoder.matches(oldPassword,user.getPassword())) {
-            Set<ConstraintViolation<PasswordValidatorClass>> constraintViolations = validate(passwordValidatorClass);
+            Set<ConstraintViolation<PasswordValidator>> constraintViolations = validate(passwordValidator);
             if (constraintViolations.size() > 0) {
-                throw new WeakPasswordEx();
+                throw new WeakPasswordException();
             } else {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 userRepo.save(user);
@@ -65,10 +65,10 @@ public class SellerService {
 
     }
 
-    private Set<ConstraintViolation<PasswordValidatorClass>> validate(PasswordValidatorClass passwordValidatorClass){
+    private Set<ConstraintViolation<PasswordValidator>> validate(PasswordValidator passwordValidator){
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator=factory.getValidator();
-        return validator.validate(passwordValidatorClass);
+        return validator.validate(passwordValidator);
     }
 
     public List<Product> myProducts(String name){

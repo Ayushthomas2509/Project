@@ -4,27 +4,23 @@ import ayushproject.ayushecommerce.entities.Customer;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;
 import ayushproject.ayushecommerce.exceptions.ConfirmPasswordException;
-import ayushproject.ayushecommerce.exceptions.WeakPasswordEx;
+import ayushproject.ayushecommerce.exceptions.WeakPasswordException;
 import ayushproject.ayushecommerce.repo.*;
 import ayushproject.ayushecommerce.security.GrantAuthorityImpl;
-import ayushproject.ayushecommerce.security.PasswordValidatorClass;
+import ayushproject.ayushecommerce.security.PasswordValidator;
 import ayushproject.ayushecommerce.security.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -51,7 +47,7 @@ public class UserService {
     private TokenStore tokenStore;
     PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
     @Autowired
-    PasswordValidatorClass passwordValidatorClass;
+    PasswordValidator passwordValidator;
     @Autowired
     private MessageSource messageSource;;
 
@@ -112,11 +108,11 @@ public class UserService {
     public String addSeller(Seller user, Locale locale){
         if (userRepo.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("not found"); }
-        passwordValidatorClass.setPassword(user.getPassword());
-        Set<ConstraintViolation<PasswordValidatorClass>> constraintViolations=validate(passwordValidatorClass);
+        passwordValidator.setPassword(user.getPassword());
+        Set<ConstraintViolation<PasswordValidator>> constraintViolations=validate(passwordValidator);
 
         if (constraintViolations.size()>0){
-            throw new WeakPasswordEx();
+            throw new WeakPasswordException();
         }
         else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -133,10 +129,10 @@ public class UserService {
         if (userRepo.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("Customer Already Exsists");
         }
-        passwordValidatorClass.setPassword(user.getPassword());
-        Set<ConstraintViolation<PasswordValidatorClass>> constraintViolations=validate(passwordValidatorClass);
+        passwordValidator.setPassword(user.getPassword());
+        Set<ConstraintViolation<PasswordValidator>> constraintViolations=validate(passwordValidator);
             if (constraintViolations.size()>0){
-                throw new WeakPasswordEx();
+                throw new WeakPasswordException();
             }
             else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -150,10 +146,10 @@ public class UserService {
     }
 
 
-    private Set<ConstraintViolation<PasswordValidatorClass>> validate(PasswordValidatorClass passwordValidatorClass){
+    private Set<ConstraintViolation<PasswordValidator>> validate(PasswordValidator passwordValidator){
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator=factory.getValidator();
-        return validator.validate(passwordValidatorClass);
+        return validator.validate(passwordValidator);
     }
 
      private void sendMail(User user,String subject){
@@ -216,10 +212,10 @@ public class UserService {
 
         if (token!=null){
             User user = userRepo.findByname(token.getUser().getName());
-            passwordValidatorClass.setPassword(newPassword);
-            Set<ConstraintViolation<PasswordValidatorClass>> constraintViolations=validate(passwordValidatorClass);
+            passwordValidator.setPassword(newPassword);
+            Set<ConstraintViolation<PasswordValidator>> constraintViolations=validate(passwordValidator);
             if (constraintViolations.size() > 0){
-                throw new WeakPasswordEx();
+                throw new WeakPasswordException();
             }
             else {
                 if (newPassword.equals(confirmPassword)) {

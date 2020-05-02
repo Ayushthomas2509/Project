@@ -3,7 +3,7 @@ package ayushproject.ayushecommerce.services;
 import ayushproject.ayushecommerce.entities.Cart;
 import ayushproject.ayushecommerce.entities.Orders;
 import ayushproject.ayushecommerce.entities.Product;
-import ayushproject.ayushecommerce.enums.STATUS;
+import ayushproject.ayushecommerce.enums.Status;
 import ayushproject.ayushecommerce.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,35 +53,35 @@ public class OrderServices {
         }
 
         order.setAddress(customerRepo.findById(userid).get().getAddress().get(address));
-        order.setOrderstatus(STATUS.Placed);
+        order.setOrderstatus(Status.Placed);
         orderRepo.save(order);
         return "Order Placed";
     }
 
     public String cancelOrder(Integer orderId){
         Orders orders = orderRepo.findById(orderId).get();
-        if (orders.getOrderstatus()!=STATUS.Accepted){
+        if (orders.getOrderstatus()!= Status.Accepted){
             return "Not Possible";
         }
-        orders.setOrderstatus(STATUS.Cancelled);
+        orders.setOrderstatus(Status.Cancelled);
         orderRepo.save(orders);
         return "Order Cancelled";
     }
 
     public String returnOrder(Integer orderId){
         Orders orders = orderRepo.findById(orderId).get();
-        if (orders.getOrderstatus()!=STATUS.Delivered){
+        if (orders.getOrderstatus()!= Status.Delivered){
             return "Order Can Not Be Returned";
         }
-        orders.setOrderstatus(STATUS.Return_Requested);
+        orders.setOrderstatus(Status.Return_Requested);
         orderRepo.save(orders);
         return "Request Generated";
 
     }
 
-    public String respondOnOrder(Integer orderid,STATUS status){
+    public String respondOnOrder(Integer orderid, Status status){
         Orders orders=orderRepo.findById(orderid).get();
-        if (orders.getOrderstatus()!=STATUS.Placed){
+        if (orders.getOrderstatus()!= Status.Placed){
             return "NOT POSSIBLE ORDER PLACED";
         }
         orders.setOrderstatus(status);
@@ -90,16 +90,16 @@ public class OrderServices {
     }
 
 
-    public String changeStatus(Integer orderId,STATUS status){
+    public String changeStatus(Integer orderId, Status status){
         Orders orders=orderRepo.findById(orderId).get();
         orders.setOrderstatus(status);
         orderRepo.save(orders);
         return status.toString();
     }
 
-    public String respondReturn(Integer orderId,STATUS status){
+    public String respondReturn(Integer orderId, Status status){
         Orders orders=orderRepo.findById(orderId).get();
-        if (orders.getOrderstatus()!=STATUS.Return_Requested){
+        if (orders.getOrderstatus()!= Status.Return_Requested){
             return "Not Possible";
         }
         orders.setOrderstatus(status);
