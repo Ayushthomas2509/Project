@@ -14,20 +14,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-public class OrderServices {
+public class OrderService {
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepository;
     @Autowired
-    OrderRepo orderRepo;
+    OrderRepository orderRepository;
     @Autowired
-    CustomerRepo customerRepo;
+    CustomerRepository customerRepository;
     @Autowired
-    CartRepo cartRepo;
+    CartRepository cartRepository;
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepository;
 
     public Iterable<Orders> findAll(){
-        return orderRepo.findAll();
+        return orderRepository.findAll();
     }
 
     public String placeOrder(Integer userid,Integer address) {
@@ -37,8 +37,8 @@ public class OrderServices {
         order.setProducts(productList);
         order.setOrderdate(new Date());
         order.setQuantity(quantityList);
-        order.setUser(customerRepo.findById(userid).get());
-        Iterable<Cart> cartIterable = cartRepo.findAll();
+        order.setUser(customerRepository.findById(userid).get());
+        Iterable<Cart> cartIterable = cartRepository.findAll();
         Iterator<Cart> cartIterator = cartIterable.iterator();
         if (!cartIterable.iterator().hasNext()) {
             return "Your Cart is Empty";
@@ -46,64 +46,64 @@ public class OrderServices {
         while (cartIterator.hasNext()){
             Cart currentCart=cartIterator.next();
             if (currentCart.getUserid().equals(userid)){
-                productList.add(productRepo.findById(currentCart.getProductPOSTid()).get());
+                productList.add(productRepository.findById(currentCart.getProductPOSTid()).get());
                 quantityList.add(currentCart.getQuantity());
-                cartRepo.deleteById(currentCart.getId());
+                cartRepository.deleteById(currentCart.getId());
             }
         }
 
-        order.setAddress(customerRepo.findById(userid).get().getAddress().get(address));
+        order.setAddress(customerRepository.findById(userid).get().getAddress().get(address));
         order.setOrderstatus(Status.Placed);
-        orderRepo.save(order);
+        orderRepository.save(order);
         return "Order Placed";
     }
 
     public String cancelOrder(Integer orderId){
-        Orders orders = orderRepo.findById(orderId).get();
+        Orders orders = orderRepository.findById(orderId).get();
         if (orders.getOrderstatus()!= Status.Accepted){
             return "Not Possible";
         }
         orders.setOrderstatus(Status.Cancelled);
-        orderRepo.save(orders);
+        orderRepository.save(orders);
         return "Order Cancelled";
     }
 
     public String returnOrder(Integer orderId){
-        Orders orders = orderRepo.findById(orderId).get();
+        Orders orders = orderRepository.findById(orderId).get();
         if (orders.getOrderstatus()!= Status.Delivered){
             return "Order Can Not Be Returned";
         }
         orders.setOrderstatus(Status.Return_Requested);
-        orderRepo.save(orders);
+        orderRepository.save(orders);
         return "Request Generated";
 
     }
 
     public String respondOnOrder(Integer orderid, Status status){
-        Orders orders=orderRepo.findById(orderid).get();
+        Orders orders= orderRepository.findById(orderid).get();
         if (orders.getOrderstatus()!= Status.Placed){
             return "NOT POSSIBLE ORDER PLACED";
         }
         orders.setOrderstatus(status);
-        orderRepo.save(orders);
+        orderRepository.save(orders);
         return status.toString();
     }
 
 
     public String changeStatus(Integer orderId, Status status){
-        Orders orders=orderRepo.findById(orderId).get();
+        Orders orders= orderRepository.findById(orderId).get();
         orders.setOrderstatus(status);
-        orderRepo.save(orders);
+        orderRepository.save(orders);
         return status.toString();
     }
 
     public String respondReturn(Integer orderId, Status status){
-        Orders orders=orderRepo.findById(orderId).get();
+        Orders orders= orderRepository.findById(orderId).get();
         if (orders.getOrderstatus()!= Status.Return_Requested){
             return "Not Possible";
         }
         orders.setOrderstatus(status);
-        orderRepo.save(orders);
+        orderRepository.save(orders);
         return status.toString();
 
     }

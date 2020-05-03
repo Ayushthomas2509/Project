@@ -31,17 +31,17 @@ import java.util.*;
 public class UserService {
 
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepository;
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepository;
     @Autowired
-    CartRepo cartRepo;
+    CartRepository cartRepository;
     @Autowired
-    CustomerRepo customerRepo;
+    CustomerRepository customerRepository;
     @Autowired
-    SellerRepo sellerRepo;
+    SellerRepository sellerRepository;
     @Autowired
-    VerificationTokenRepo verificationTokenRepo;
+    VerificationTokenRepository verificationTokenRepository;
     @Autowired
     private EmailService emailService;
     private TokenStore tokenStore;
@@ -70,28 +70,28 @@ public class UserService {
     public boolean ensureCustomerOrAdmin(){return true;}
 
 
-    public Iterable<User> allUsers(Integer offset, Integer size){return userRepo.allUsers(PageRequest.of(offset,size, Sort.Direction.ASC,"id"));}
+    public Iterable<User> allUsers(Integer offset, Integer size){return userRepository.allUsers(PageRequest.of(offset,size, Sort.Direction.ASC,"id"));}
 
-    public User findUser(String name){return userRepo.findByname(name);}
+    public User findUser(String name){return userRepository.findByname(name);}
 
     public String addUser(User user){
-        userRepo.save(user);
+        userRepository.save(user);
         return "User added";
 
     }
 
     public String deleteUser(String name) {
-        userRepo.delete(userRepo.findByname(name));
+        userRepository.delete(userRepository.findByname(name));
         return "User Deleted";
     }
 
     public String editUser(User user) {
-        userRepo.save(user);
+        userRepository.save(user);
         return "User Updated";
     }
 
     public User loadUsername(String name){
-        User user = userRepo.findByname(name);
+        User user = userRepository.findByname(name);
         System.out.println(user);
         if (name != null) {
             List<GrantAuthorityImpl> grantAuthoritiesList = new ArrayList<>();
@@ -106,7 +106,7 @@ public class UserService {
     }
 
     public String addSeller(Seller user, Locale locale){
-        if (userRepo.findByname(user.getName())!=null){
+        if (userRepository.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("not found"); }
         passwordValidator.setPassword(user.getPassword());
         Set<ConstraintViolation<PasswordValidator>> constraintViolations=validate(passwordValidator);
@@ -117,7 +117,7 @@ public class UserService {
         else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setAuthoritiesList(Arrays.asList("ROLE_SELLER"));
-            userRepo.save(user);
+            userRepository.save(user);
             activateAccount(user.getName());
             return messageSource.getMessage("seller.add.message", null, locale);
 
@@ -126,7 +126,7 @@ public class UserService {
     }
 
     public String addCustomer(Customer user,Locale locale){
-        if (userRepo.findByname(user.getName())!=null){
+        if (userRepository.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("Customer Already Exsists");
         }
         passwordValidator.setPassword(user.getPassword());
@@ -134,10 +134,13 @@ public class UserService {
             if (constraintViolations.size()>0){
                 throw new WeakPasswordException();
             }
+            else if(user.getPassword().equals(user.getConfirmPassword())){
+                throw new ConfirmPasswordException("Password and confirmpassword not matched");
+            }
             else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
-                userRepo.save(user);
+                userRepository.save(user);
                 activateAccount(user.getName());
                 return messageSource.getMessage("customer.add.message",null,locale);
             }
@@ -154,7 +157,7 @@ public class UserService {
 
      private void sendMail(User user,String subject){
          VerificationToken verificationToken=new VerificationToken(user);
-         verificationTokenRepo.save(verificationToken);
+         verificationTokenRepository.save(verificationToken);
          SimpleMailMessage mailMessage=new SimpleMailMessage();
          mailMessage.setTo(user.getEmail());
          mailMessage.setSubject(subject);
@@ -165,7 +168,7 @@ public class UserService {
      }
 
      public String forgetPassword(String name){
-        User presentUser=userRepo.findByname(name);
+        User presentUser= userRepository.findByname(name);
         if (presentUser!=null){
             sendMail(presentUser,"Password-Reset");
             return "Rest Link Send To Your Mail";
@@ -174,7 +177,7 @@ public class UserService {
      }
 
     public String activateAccount(String name) {
-        User newUser = userRepo.findByname(name);
+        User newUser = userRepository.findByname(name);
         if (newUser != null) {
             sendMail(newUser,"Account-Activation");
             return "Account Activation link sent to your mail";
@@ -183,12 +186,12 @@ public class UserService {
     }
 
     public String validateActivationToken(String verificationToken) {
-        VerificationToken token=verificationTokenRepo.findByVerificationToken(verificationToken);
+        VerificationToken token= verificationTokenRepository.findByVerificationToken(verificationToken);
         if (token != null) {
-            User user = userRepo.findByname(token.getUser().getName());
+            User user = userRepository.findByname(token.getUser().getName());
             user.setFailedAttempts(0);
             user.setEnabled(true);
-            userRepo.save(user);
+            userRepository.save(user);
 //            sendMail(user,"Account-Activation");
             return "Account Activated";
         }
@@ -199,7 +202,7 @@ public class UserService {
 
 
     public String reEnableUser(String name){
-        User newUser = userRepo.findByname(name);
+        User newUser = userRepository.findByname(name);
         if(newUser != null){
             sendMail(newUser,"Account Activation");
             return "Account Activation Send ";
@@ -208,10 +211,10 @@ public class UserService {
     }
 
     public String validateResetToken(String verificationToken,String newPassword,String confirmPassword){
-        VerificationToken token=verificationTokenRepo.findByVerificationToken(verificationToken);
+        VerificationToken token= verificationTokenRepository.findByVerificationToken(verificationToken);
 
         if (token!=null){
-            User user = userRepo.findByname(token.getUser().getName());
+            User user = userRepository.findByname(token.getUser().getName());
             passwordValidator.setPassword(newPassword);
             Set<ConstraintViolation<PasswordValidator>> constraintViolations=validate(passwordValidator);
             if (constraintViolations.size() > 0){
@@ -220,7 +223,7 @@ public class UserService {
             else {
                 if (newPassword.equals(confirmPassword)) {
                     user.setPassword(passwordEncoder.encode(newPassword));
-                    userRepo.save(user);
+                    userRepository.save(user);
                     return "PASSWORD UPDATED";
                 }
                 else throw new ConfirmPasswordException("Password Dont Match");
@@ -230,10 +233,10 @@ public class UserService {
     }
 
     public String enableSeller(String name){
-        User user= userRepo.findByname(name);
+        User user= userRepository.findByname(name);
         if (user != null){
             user.setEnabled(true);
-            userRepo.save(user);
+            userRepository.save(user);
             sendMail(user,"Seller Has Been Activated");
             return "Seller Enabled";
         }
@@ -244,10 +247,10 @@ public class UserService {
 
 
     public String disableUser(String name) {
-        User user = userRepo.findByname(name);
+        User user = userRepository.findByname(name);
         if (user != null) {
             user.setEnabled(false);
-            userRepo.save(user);
+            userRepository.save(user);
             sendMail(user,"Your account has been Deactivated by admin");
             return "User disabled";
         }

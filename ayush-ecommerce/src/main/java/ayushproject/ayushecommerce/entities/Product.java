@@ -1,12 +1,12 @@
 package ayushproject.ayushecommerce.entities;
 
-import ayushproject.ayushecommerce.enums.In_Stock;
-import org.json.simple.JSONObject;
+import ayushproject.ayushecommerce.enums.InStock;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +19,13 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
     private Integer id;
+    @NotNull
     private String name;
     private String brand;
+    @NotNull
     private Integer quantity;
     @Enumerated(EnumType.STRING)
-    private In_Stock inStock;
+    private InStock inStock;
 //    private Integer categoryId;
     private String description;
     private Boolean isDeleted=false;
@@ -96,11 +98,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public In_Stock getInStock() {
+    public InStock getInStock() {
         return inStock;
     }
 
-    public void setInStock(In_Stock inStock) {
+    public void setInStock(InStock inStock) {
         this.inStock = inStock;
     }
 

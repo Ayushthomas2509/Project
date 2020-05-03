@@ -2,10 +2,10 @@ package ayushproject.ayushecommerce.services;
 
 import ayushproject.ayushecommerce.entities.Cart;
 import ayushproject.ayushecommerce.entities.Product;
-import ayushproject.ayushecommerce.enums.In_Stock;
-import ayushproject.ayushecommerce.repo.CartRepo;
-import ayushproject.ayushecommerce.repo.ProductRepo;
-import ayushproject.ayushecommerce.repo.UserRepo;
+import ayushproject.ayushecommerce.enums.InStock;
+import ayushproject.ayushecommerce.repo.CartRepository;
+import ayushproject.ayushecommerce.repo.ProductRepository;
+import ayushproject.ayushecommerce.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,20 +14,20 @@ import java.util.Iterator;
 @Component
 public class CartService {
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepository;
     @Autowired
-    CartRepo cartRepo;
+    CartRepository cartRepository;
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepository;
 
-    public Iterable<Cart> allcarts(){ return cartRepo.findAll();}
-    public Iterable<Cart> viewCart(Integer userid){return cartRepo.findByuserid(userid);}
+    public Iterable<Cart> allcarts(){ return cartRepository.findAll();}
+    public Iterable<Cart> viewCart(Integer userid){return cartRepository.findByuserid(userid);}
 
     public String addToCart (Integer userId, Integer productID, Integer quantity){
-        Iterator<Cart> cartIterator = cartRepo.findAll().iterator();
+        Iterator<Cart> cartIterator = cartRepository.findAll().iterator();
 
-        Product product = productRepo.findById(productID).get();
-        if (product.getInStock() == In_Stock.Yes){
+        Product product = productRepository.findById(productID).get();
+        if (product.getInStock() == InStock.Yes){
             if (product.getQuantity()-quantity<0){
                 return "Not In Stock="+product.getQuantity();
             }
@@ -37,10 +37,10 @@ public class CartService {
                     currentCart.setQuantity(currentCart.getQuantity()+quantity);
                     product.setQuantity(product.getQuantity()-quantity);
                     if (product.getQuantity()<= 0){
-                        product.setInStock(In_Stock.No);
+                        product.setInStock(InStock.No);
                     }
-                    productRepo.save(product);
-                    cartRepo.save(currentCart);
+                    productRepository.save(product);
+                    cartRepository.save(currentCart);
 
                     return "Quantity Increased to"+currentCart.getQuantity();
 
@@ -52,10 +52,10 @@ public class CartService {
             cart.setQuantity(quantity);
             product.setQuantity(product.getQuantity()-quantity);
             if (product.getQuantity()<=0){
-                 product.setInStock(In_Stock.No);
+                 product.setInStock(InStock.No);
             }
-            productRepo.save(product);
-            cartRepo.save(cart);
+            productRepository.save(product);
+            cartRepository.save(cart);
 
             return "Moved To Cart";
 
@@ -65,8 +65,8 @@ public class CartService {
 
     public String removeFromCart(Integer userid,Integer productId){
         String msg="Item Not in cart";
-        Iterator<Cart> cartIterator = cartRepo.findAll().iterator();
-        Product product = productRepo.findById(productId).get();
+        Iterator<Cart> cartIterator = cartRepository.findAll().iterator();
+        Product product = productRepository.findById(productId).get();
         msg = findCart(userid, productId, msg ,cartIterator, product);
         return msg;
     }
@@ -87,17 +87,17 @@ public class CartService {
         currentCart.setQuantity(currentCart.getQuantity() - 1);
         product.setQuantity(product.getQuantity() + 1);
         if (product.getQuantity()>0){
-            product.setInStock(In_Stock.Yes);
+            product.setInStock(InStock.Yes);
         }
         if (currentCart.getQuantity()<0){
-            cartRepo.delete(currentCart);
-            productRepo.save(product);
+            cartRepository.delete(currentCart);
+            productRepository.save(product);
             msg="Item removed";
         }
         else {
-            cartRepo.save(currentCart);
+            cartRepository.save(currentCart);
         }
-        productRepo.save(product);
+        productRepository.save(product);
         msg="Quantity decreased to"+currentCart.getQuantity();
         return  msg;
     }

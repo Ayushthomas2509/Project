@@ -1,58 +1,57 @@
 package ayushproject.ayushecommerce.services;
 
-import ayushproject.ayushecommerce.dto.CategoryDTO;
-import ayushproject.ayushecommerce.dto.CategoryFilterDTO;
+import ayushproject.ayushecommerce.dto.CategoryDto;
+import ayushproject.ayushecommerce.dto.CategoryFilterDto;
 import ayushproject.ayushecommerce.entities.Category;
 import ayushproject.ayushecommerce.entities.CategoryFieldValues;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.exceptions.ProductNotFoundException;
-import ayushproject.ayushecommerce.repo.CategoryFeildValueRepo;
-import ayushproject.ayushecommerce.repo.CategoryFieldRepo;
-import ayushproject.ayushecommerce.repo.CategoryRepo;
-import ayushproject.ayushecommerce.repo.ProductRepo;
+import ayushproject.ayushecommerce.repo.CategoryFeildValueRepository;
+import ayushproject.ayushecommerce.repo.CategoryFieldRepositary;
+import ayushproject.ayushecommerce.repo.CategoryRepository;
+import ayushproject.ayushecommerce.repo.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
-public class CategoryServices {
+public class CategoryService {
 
     @Autowired
-    CategoryRepo categoryRepo;
+    CategoryRepository categoryRepository;
     @Autowired
-    CategoryFieldRepo categoryFieldRepo;
+    CategoryFieldRepositary categoryFieldRepositary;
     @Autowired
-    CategoryFeildValueRepo categoryFeildValueRepo;
+    CategoryFeildValueRepository categoryFeildValueRepository;
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepository;
     @Autowired
     private ModelMapper modelMapper;
     //private java.lang.Object Object;
 
     public Iterable<Category> findAll() {
         Pageable paging = PageRequest.of(0, 10, Sort.by("name").ascending());
-        return categoryRepo.findAll(paging);
+        return categoryRepository.findAll(paging);
     }
 
     public String addCategory(Category category) {
-        if (categoryRepo.findByName(category.getName())!=null) {
+        if (categoryRepository.findByName(category.getName())!=null) {
             throw new ProductNotFoundException("Category already exists");
         }
-        categoryRepo.save(category);
+        categoryRepository.save(category);
         return "Category Saved";
     }
 
-    public CategoryDTO findCategory(Integer categoryId) {
-        Category category = categoryRepo.findById(categoryId).get();
-        CategoryDTO categoryDTO = modelMapper.map(category, CategoryDTO.class);
+    public CategoryDto findCategory(Integer categoryId) {
+        Category category = categoryRepository.findById(categoryId).get();
+        CategoryDto categoryDTO = modelMapper.map(category, CategoryDto.class);
         List<Category> categoryList = new ArrayList<>();
-        Iterator<Category> categoryIterator = categoryRepo.findAll().iterator();
+        Iterator<Category> categoryIterator = categoryRepository.findAll().iterator();
         while (categoryIterator.hasNext()) {
             Category currentCategory = categoryIterator.next();
 //            System.out.println(categoryId+">>>>>>>>>>);
@@ -65,31 +64,31 @@ public class CategoryServices {
     }
 
     public String editCategory(String newName, Integer categoryId) {
-        if (categoryRepo.findByName(newName)!=null) {
+        if (categoryRepository.findByName(newName)!=null) {
             return "Category Exsists";
         }
-        Category category = categoryRepo.findById(categoryId).get();
+        Category category = categoryRepository.findById(categoryId).get();
         category.setName(newName);
-        categoryRepo.save(category);
+        categoryRepository.save(category);
         return "Category Updated";
     }
 
-    public Iterable<CategoryDTO> leafnodeCategories() {
-        List<CategoryDTO> categoryDTOList = new ArrayList<>();
-        Iterator<Category> categoryIterator = categoryRepo.findAll().iterator();
+    public Iterable<CategoryDto> leafnodeCategories() {
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        Iterator<Category> categoryIterator = categoryRepository.findAll().iterator();
         while (categoryIterator.hasNext()) {
-            CategoryDTO currentCategory = findCategory(categoryIterator.next().getId());
+            CategoryDto currentCategory = findCategory(categoryIterator.next().getId());
             if (currentCategory.getImmediateChild().isEmpty()) {
-                categoryDTOList.add(currentCategory);
+                categoryDtoList.add(currentCategory);
             }
         }
-        return categoryDTOList;
+        return categoryDtoList;
     }
 
-    public CategoryFilterDTO CategoryFilter(Integer categoryId) {
-        CategoryFilterDTO categoryFilterDTO = new CategoryFilterDTO();
+    public CategoryFilterDto CategoryFilter(Integer categoryId) {
+        CategoryFilterDto categoryFilterDTO = new CategoryFilterDto();
         List<CategoryFieldValues> categoryFieldValuesList = new ArrayList<>();
-        Iterator<CategoryFieldValues> categoryFieldValuesIterator = categoryFeildValueRepo.findAll().iterator();
+        Iterator<CategoryFieldValues> categoryFieldValuesIterator = categoryFeildValueRepository.findAll().iterator();
         while (categoryFieldValuesIterator.hasNext()) {
             CategoryFieldValues currentCategoryFieldValues = categoryFieldValuesIterator.next();
             if (currentCategoryFieldValues.getId().getCategoryId().getId() == categoryId) {
@@ -100,11 +99,11 @@ public class CategoryServices {
         Integer max = Integer.MIN_VALUE;
         Integer min = Integer.MAX_VALUE;
         Set<String> brandsList = new HashSet<>();
-        Optional<Category> category=categoryRepo.findById(categoryId);
+        Optional<Category> category= categoryRepository.findById(categoryId);
 //        System.out.println("\n\n\n\n"+ category.get().getName());
-//        Optional<Category> parentCategory = categoryRepo.findByParentCategory(category.get().getParentCategory());
+//        Optional<Category> parentCategory = categoryRepository.findByParentCategory(category.get().getParentCategory());
 //        System.out.println("\n\n\n\n"+ parentCategory.get().getName());
-        List<Product> product = productRepo.findByCategory(category.get());
+        List<Product> product = productRepository.findByCategory(category.get());
         for (Product objects: product){
             System.out.println(objects.getBrand());
                 brandsList.add(objects.getBrand());

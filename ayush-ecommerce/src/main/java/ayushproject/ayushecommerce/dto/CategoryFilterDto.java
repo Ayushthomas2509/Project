@@ -6,7 +6,7 @@ import javax.persistence.ElementCollection;
 import java.util.List;
 import java.util.Set;
 
-public class CategoryFilterDTO {
+public class CategoryFilterDto {
     private List<CategoryFieldValues> categoryFieldValues;
     private Set<String> brandsList;
     private Integer maximumPrice=0;

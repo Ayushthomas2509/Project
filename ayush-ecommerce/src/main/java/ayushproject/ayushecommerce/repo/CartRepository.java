@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface CartRepo extends CrudRepository<Cart,Integer> {
+public interface CartRepository extends CrudRepository<Cart,Integer> {
     @Query(value = "select * from Cart",nativeQuery = true)
     List<Cart> allcarts();
     Iterable<Cart> findByuserid(@Param("userid") Integer userid);

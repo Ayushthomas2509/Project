@@ -28,7 +28,6 @@ public class UserController {
 
 
     @GetMapping("/users/{offset}/{size}")
-    //@Scheduled
     public Iterable<User> allUsers(@PathVariable Integer offset,@PathVariable Integer size){
         logger.info("Method Accessed");
         logger.warn("Warning");

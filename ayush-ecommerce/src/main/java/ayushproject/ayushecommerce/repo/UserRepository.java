@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface UserRepo extends CrudRepository<User,Integer> {
+public interface UserRepository extends CrudRepository<User,Integer> {
 
     @Query("from User")
     List<User> allUsers(Pageable pageable);

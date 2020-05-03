@@ -1,11 +1,11 @@
 package ayushproject.ayushecommerce.repo;
 
-import ayushproject.ayushecommerce.entities.Reviews;
+import ayushproject.ayushecommerce.entities.Seller;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReviewRepo extends CrudRepository<Reviews,Integer>{
-Iterable<Reviews> findByProductId(@Param("productId")Integer productId);
+public interface SellerRepository extends CrudRepository<Seller,Integer> {
+    Seller findByName(@Param("name")String name);
 }

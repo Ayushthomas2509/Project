@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface VerificationTokenRepo extends CrudRepository<VerificationToken,Integer> {
+public interface VerificationTokenRepository extends CrudRepository<VerificationToken,Integer> {
 
     VerificationToken findByVerificationToken(String verificationToken );
 }

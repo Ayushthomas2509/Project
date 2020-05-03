@@ -1,7 +1,7 @@
 package ayushproject.ayushecommerce.services;
 
 import ayushproject.ayushecommerce.entities.Wishlist;
-import ayushproject.ayushecommerce.repo.WishlistRepo;
+import ayushproject.ayushecommerce.repo.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +12,13 @@ public class WishlistService {
     @Autowired
     CartService cartService;
     @Autowired
-    WishlistRepo wishlistRepo;
+    WishlistRepository wishlistRepository;
 
-    public Iterable<Wishlist> allWishlist(){return wishlistRepo.findAll();}
-    public Iterable<Wishlist> viewWishList(Integer userId){return wishlistRepo.findByUserId(userId);}
+    public Iterable<Wishlist> allWishlist(){return wishlistRepository.findAll();}
+    public Iterable<Wishlist> viewWishList(Integer userId){return wishlistRepository.findByUserId(userId);}
 
     public String addToWishlist(Integer userId, Integer productId) {
-        Iterator<Wishlist> wishlistIterator= wishlistRepo.findAll().iterator();
+        Iterator<Wishlist> wishlistIterator= wishlistRepository.findAll().iterator();
         while (wishlistIterator.hasNext()){
             Wishlist currentWishlist=wishlistIterator.next();
             if(currentWishlist.getUserId()==userId&&currentWishlist.getProductId()==productId) {
@@ -28,18 +28,18 @@ public class WishlistService {
         Wishlist wishlist=new Wishlist();
         wishlist.setUserId(userId);
         wishlist.setProductId(productId);
-        wishlistRepo.save(wishlist);
+        wishlistRepository.save(wishlist);
         return "Added to Wishlist";
 
     }
 
     public String removeFromWishlist(Integer userId, Integer productId) {
         String msg="Item Not in Wishlist";
-        Iterator<Wishlist> wishlistIterator= wishlistRepo.findAll().iterator();
+        Iterator<Wishlist> wishlistIterator= wishlistRepository.findAll().iterator();
         while (wishlistIterator.hasNext()){
             Wishlist currentWishlist=wishlistIterator.next();
             if(currentWishlist.getUserId()==userId&&currentWishlist.getProductId()==productId) {
-                wishlistRepo.delete(currentWishlist);
+                wishlistRepository.delete(currentWishlist);
                 msg="Item Removed ";
             }
         }

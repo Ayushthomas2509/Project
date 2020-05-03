@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,27 +24,27 @@ CustomerService customerService;
     return customerService.allCustomers();
 }
 
-@GetMapping("/customers/{name}")
-    public Customer findByName(String name){
+@GetMapping("/customer/profile")
+    public Customer findByName(){
     userService.ensureCustomer();
-    return customerService.myProfile(name);
+    return customerService.myProfile();
 }
-    @GetMapping("customers/{name}/viewAddress")
-    public List<Address> viewAddress(@PathVariable String name)  {
+    @GetMapping("customers/viewAddress")
+    public List<Address> viewAddress()  {
      userService.ensureCustomer();
-        return customerService.viewAdress(name);
+        return customerService.viewAdress();
     }
 
-    @PutMapping("/customers/{name}/addAddress")
-    public List<Address> addAddress(@PathVariable String name,@RequestBody Address address) {
+    @PutMapping("/customers/addAddress")
+    public List<Address> addAddress(@Valid @RequestBody Address address) {
         userService.ensureCustomer();
-        return customerService.addAddress(address,name);
+        return customerService.addAddress(address);
     }
 
-    @PutMapping("/customers/{name}/editAddress/{addressId}")
-    public List<Address> editAddress(@PathVariable String name, @PathVariable Integer addressId, @RequestBody Address address) {
+    @PutMapping("/customers/editAddress/{addressId}")
+    public List<Address> editAddress(@Valid @PathVariable Integer addressId, @RequestBody Address address) {
     userService.ensureCustomer();
-        return customerService.editAddress(address,addressId,name);
+        return customerService.editAddress(address,addressId);
     }
 
     @DeleteMapping("/customers/{name}/deleteAddress/{addressId}")

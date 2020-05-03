@@ -1,7 +1,7 @@
 package ayushproject.ayushecommerce.security;
 
 import ayushproject.ayushecommerce.entities.User;
-import ayushproject.ayushecommerce.repo.UserRepo;
+import ayushproject.ayushecommerce.repo.UserRepository;
 import ayushproject.ayushecommerce.services.EmailService;
 import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +11,13 @@ import org.springframework.security.authentication.event.AbstractAuthenticationE
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 @Component
 public class AuthenticationListener implements ApplicationListener<AbstractAuthenticationEvent> {
 
     int j=0;
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepository;
 
     @Autowired
     EmailService emailService;
@@ -38,12 +33,12 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
 //        String username =  request.getParameter("name");
 //        if (username==null) {
 //        }else {
-//            User user=userRepo.findByname(username);
+//            User user=userRepository.findByname(username);
 //            j++;
 //            if (j%3==0){
 //                if (appEvent.getAuthentication().isAuthenticated()) {
 //                    user.setFailedAttempts(0);
-//                    userRepo.save(user);
+//                    userRepository.save(user);
 //                    System.out.println("Login successful");
 //
 //                } else
@@ -56,7 +51,7 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
 //                    else {
 //                        user.setFailedAttempts(user.getFailedAttempts()+1);
 //                    }
-//                    userRepo.save(user);
+//                    userRepository.save(user);
 //                    System.out.println("Login failed Attempts remaining "+(3-user.getFailedAttempts()));
 //
 //                }
@@ -82,7 +77,7 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
             // for example, counting the number of login failure attempts and storing it in db
             // this count can be used to lock or disable any user account as per business requirements
             String username = (String) event.getAuthentication().getPrincipal();
-            User user = userRepo.findByname(username);
+            User user = userRepository.findByname(username);
             if (user != null) {
                 if (user.getFailedAttempts() == 2) {
                     user.setIs_active(false);
@@ -102,7 +97,7 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
                 } else {
                     user.setFailedAttempts(user.getFailedAttempts() + 1);
                 }
-                userRepo.save(user);
+                userRepository.save(user);
             }
         }
     }

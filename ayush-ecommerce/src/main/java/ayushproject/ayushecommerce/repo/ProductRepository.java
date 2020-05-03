@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface ProductRepo extends CrudRepository<Product,Integer> {
+public interface ProductRepository extends CrudRepository<Product,Integer> {
 
     @Query("from Product where category=:category")
     List<Product> perCategory(@Param("category")Category category);

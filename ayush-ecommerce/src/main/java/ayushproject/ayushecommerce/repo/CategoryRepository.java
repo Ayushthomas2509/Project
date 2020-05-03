@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepo extends PagingAndSortingRepository<Category,Integer> {
+public interface CategoryRepository extends PagingAndSortingRepository<Category,Integer> {
 
     Category findByName(@Param("name") String name);
 

@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CategoryFieldRepo extends CrudRepository<CategoryField,Integer> {
+public interface CategoryFieldRepositary extends CrudRepository<CategoryField,Integer> {
 
     CategoryField findByName(@Param("name") String name);
     //Boolean exsistByName(@Param("name") String name);

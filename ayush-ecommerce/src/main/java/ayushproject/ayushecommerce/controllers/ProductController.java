@@ -1,6 +1,6 @@
 package ayushproject.ayushecommerce.controllers;
 
-import ayushproject.ayushecommerce.dto.ProductDTO;
+import ayushproject.ayushecommerce.dto.ProductDto;
 import ayushproject.ayushecommerce.dto.VariationDto;
 import ayushproject.ayushecommerce.entities.Product;
 //import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
@@ -10,8 +10,8 @@ import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class ProductController {
@@ -28,18 +28,19 @@ public class ProductController {
 
     @GetMapping("/products/{category}")
     public List<Product> perCategory(@PathVariable Integer category){
+        userService.ensureUser();
         return productService.perCategory(category);
     }
 
     @PostMapping("/add-products")
-    public String addProduct(@RequestBody Product product) {
+    public String addProduct(@Valid @RequestBody Product product) {
         userService.ensureSeller();
         return productService.addProduct(product);
     }
 
 
     @PostMapping("/edit-products")
-    public String editProduct(@RequestBody Product product){
+    public String editProduct(@Valid @RequestBody Product product){
         userService.ensureSeller();
         return productService.editProduct(product);
     }
@@ -87,7 +88,7 @@ public class ProductController {
     }
 
     @GetMapping("/productsDTO/{productId}")
-    public ProductDTO findProductDTO(@PathVariable Integer productId){
+    public ProductDto findProductDTO(@PathVariable Integer productId){
         return productService.findProductDTO(productId);
     }
 

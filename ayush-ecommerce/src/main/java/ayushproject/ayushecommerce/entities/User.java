@@ -45,7 +45,8 @@ public class User implements UserDetails {
     @ElementCollection
     List<GrantAuthorityImpl> grantAuthorities;
     public User(String username, String password, List<GrantAuthorityImpl> grantAuthorities) {
-        this.name = name;         this.password = password;
+        this.name = name;
+        this.password = password;
         this.grantAuthorities = grantAuthorities;     }
 
     public User() {

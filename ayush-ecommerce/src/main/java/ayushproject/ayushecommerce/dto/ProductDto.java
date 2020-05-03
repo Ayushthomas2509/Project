@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 import java.util.Map;
 
-public class ProductDTO {
+public class ProductDto {
     private Integer id;
     private String name;
     private String brand;

@@ -5,7 +5,7 @@ import ayushproject.ayushecommerce.entities.Category;
 import javax.persistence.*;
 import java.util.List;
 
-public class CategoryDTO {
+public class CategoryDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -13,14 +13,14 @@ public class CategoryDTO {
     private Category parentCategory;
     private List<Category> immediateChild;
 
-    public CategoryDTO(Integer id, String name, Category parentCategory, List<Category> immediateChild) {
+    public CategoryDto(Integer id, String name, Category parentCategory, List<Category> immediateChild) {
         this.id = id;
         this.name = name;
         this.parentCategory = parentCategory;
         this.immediateChild = immediateChild;
     }
 
-    public CategoryDTO() {
+    public CategoryDto() {
     }
 
     public Integer getId() {

@@ -5,9 +5,9 @@ import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;
 import ayushproject.ayushecommerce.exceptions.WeakPasswordException;
-import ayushproject.ayushecommerce.repo.ProductRepo;
-import ayushproject.ayushecommerce.repo.SellerRepo;
-import ayushproject.ayushecommerce.repo.UserRepo;
+import ayushproject.ayushecommerce.repo.ProductRepository;
+import ayushproject.ayushecommerce.repo.SellerRepository;
+import ayushproject.ayushecommerce.repo.UserRepository;
 import ayushproject.ayushecommerce.security.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,39 +25,39 @@ import java.util.Set;
 public class SellerService {
 
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepository;
     @Autowired
-    SellerRepo sellerRepo;
+    SellerRepository sellerRepository;
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepository;
     @Autowired
     PasswordValidator passwordValidator;
     PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     public Iterable<Seller> viewAll(){
-        return sellerRepo.findAll();
+        return sellerRepository.findAll();
     }
 
     public Seller findByName(String name){
-        return sellerRepo.findByName(name);
+        return sellerRepository.findByName(name);
     }
 
     public String editAddress(Address address,String name){
-        Seller seller =sellerRepo.findByName(name);
+        Seller seller = sellerRepository.findByName(name);
         seller.setAddress(address);
-        sellerRepo.save(seller);
+        sellerRepository.save(seller);
         return "ADDRESS UPDATED";
     }
 
     public String updatePassword(String newPassword,String oldPassword,String name){
-        User user=userRepo.findByname(name);
+        User user= userRepository.findByname(name);
         if(passwordEncoder.matches(oldPassword,user.getPassword())) {
             Set<ConstraintViolation<PasswordValidator>> constraintViolations = validate(passwordValidator);
             if (constraintViolations.size() > 0) {
                 throw new WeakPasswordException();
             } else {
                 user.setPassword(passwordEncoder.encode(newPassword));
-                userRepo.save(user);
+                userRepository.save(user);
                 return "PASSWORD UPDATED";
             }
         }
@@ -72,8 +72,8 @@ public class SellerService {
     }
 
     public List<Product> myProducts(String name){
-        Seller seller=sellerRepo.findByName(name);
-        return productRepo.perSellerProducts(seller.getId());
+        Seller seller= sellerRepository.findByName(name);
+        return productRepository.perSellerProducts(seller.getId());
     }
 }
 

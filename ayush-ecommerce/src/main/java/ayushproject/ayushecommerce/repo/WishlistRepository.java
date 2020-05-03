@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface WishlistRepo extends CrudRepository<Wishlist,Integer> {
+public interface WishlistRepository extends CrudRepository<Wishlist,Integer> {
     @Query(value = "select * from wishlist",nativeQuery = true)
     List<Wishlist> allCarts();
     Iterable<Wishlist> findByUserId(@Param("userid")Integer userId);

@@ -1,13 +1,13 @@
 package ayushproject.ayushecommerce.services;
 
-import ayushproject.ayushecommerce.dto.ProductDTO;
+import ayushproject.ayushecommerce.dto.ProductDto;
 import ayushproject.ayushecommerce.dto.VariationDto;
 import ayushproject.ayushecommerce.entities.Category;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.entities.User;
 //import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
 //import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
-import ayushproject.ayushecommerce.enums.In_Stock;
+import ayushproject.ayushecommerce.enums.InStock;
 import ayushproject.ayushecommerce.exceptions.InvalidFieldException;
 import ayushproject.ayushecommerce.exceptions.ProductNotFoundException;
 import ayushproject.ayushecommerce.repo.*;
@@ -17,51 +17,47 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 @Component
 public class ProductService {
     @Autowired
-    UserRepo userRepo;
+    UserRepository userRepository;
     @Autowired
-    ProductRepo productRepo;
+    ProductRepository productRepository;
     @Autowired
     EmailService emailService;
     @Autowired
     ModelMapper modelMapper;
     @Autowired
-    CategoryFieldRepo categoryFieldRepo;
+    CategoryFieldRepositary categoryFieldRepositary;
     @Autowired
-    CategoryFeildValueRepo categoryFeildValueRepo;
+    CategoryFeildValueRepository categoryFeildValueRepository;
     @Autowired
-    CategoryRepo categoryRepo;
+    CategoryRepository categoryRepository;
 
     public User getLoggedInCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetail = (User) authentication.getPrincipal();
         String username = userDetail.getUsername();
-        User user = userRepo.findByname(username);
+        User user = userRepository.findByname(username);
         return user;
     }
 
     public Iterable<Product> allProducts() {
-        return productRepo.findAll();
+        return productRepository.findAll();
     }
 
 
     public List<Product> perCategory(Integer category) {
-        Optional<Category> category1=categoryRepo.findById(category);
-        return productRepo.perCategory(category1.get());
+        Optional<Category> category1= categoryRepository.findById(category);
+        return productRepository.perCategory(category1.get());
     }
 
     public String addProduct(Product product) {
-        productRepo.save(product);
-        User admin = userRepo.findById(1).get();
+        productRepository.save(product);
+        User admin = userRepository.findById(1).get();
         if (product.getQuantity() <= 0) {
 
             throw new InvalidFieldException("Quantity Should Be Entered");
@@ -71,7 +67,7 @@ public class ProductService {
     }
 
     public Product findProduct(Integer productId) {
-        Product product = productRepo.findById(productId).get();
+        Product product = productRepository.findById(productId).get();
         if (productId == null) {
             throw new ProductNotFoundException("Invalid Product" + productId);
         } else {
@@ -80,7 +76,7 @@ public class ProductService {
     }
 
     public String editProduct(Product product) {
-        productRepo.save(product);
+        productRepository.save(product);
         return "Product Updated";
     }
 
@@ -99,9 +95,9 @@ public class ProductService {
     }
 
     public String removeProduct(Integer productId) {
-        Product product = (productRepo.findById(productId).get());
+        Product product = (productRepository.findById(productId).get());
         product.setDeleted(true);
-        productRepo.save(product);
+        productRepository.save(product);
         return "Product deleted";
     }
 
@@ -113,7 +109,7 @@ public class ProductService {
 
     public String editElectronicsProduct(Integer id, Product product) {
         User user = getLoggedInCustomer();
-        Optional<Product> productOptional = productRepo.findById(id);
+        Optional<Product> productOptional = productRepository.findById(id);
         if(product.getQuantity()!=null)
             productOptional.get().setQuantity(product.getQuantity());
         if(product.getCategory()!=null)
@@ -127,20 +123,20 @@ public class ProductService {
         if(product.getPrice()!=null)
             productOptional.get().setPrice(product.getPrice());
         productOptional.get().setSellerId(user.getId());
-        productRepo.save(productOptional.get());
+        productRepository.save(productOptional.get());
         return "PRODUCT UPDATED";
 
     }
 
 //    public String editFashionProduct(@PathVariable Integer id, @RequestBody Map<String, Object> fields) {
-//        Product product = productRepo.findById(id).get();
+//        Product product = productRepository.findById(id).get();
 ////        Map Key is the field name , v is value
 //        fields.forEach((k, v) -> {
 //            Field field = ReflectionUtils.findField(Fashion.class, k);
 //            field.setAccessible(true);
 //            ReflectionUtils.setField(field, product, v);
 //        });
-//        productRepo.save(product);
+//        productRepository.save(product);
 //        return "PRODUCT UPDATED";
 
     public String disableProduct(Integer productId) {
@@ -152,7 +148,7 @@ public class ProductService {
     public String addProductVariation(Integer productId, VariationDto variationDto) {
         Product product = findProduct(productId);
         Product product1= new Product();
-        List<Product> productList = (List<Product>) productRepo.findAll();
+        List<Product> productList = (List<Product>) productRepository.findAll();
         for(Product product2: productList)
             product1.setId(product2.getId()+1);
         product1.setName(product.getName());
@@ -160,18 +156,18 @@ public class ProductService {
         product1.setDescription(product.getDescription());
         product1.setSellerId(product.getSellerId());
         product1.setCategory(product.getCategory());
-        product1.setInStock(In_Stock.Yes);
+        product1.setInStock(InStock.Yes);
         product1.setPrice(variationDto.getPrice());
         product1.setQuantity(variationDto.getQuantity());
         product1.setMetaData(variationDto.getMetaData());
         product1.setProductImage(variationDto.getImage());
-        productRepo.save(product1);
+        productRepository.save(product1);
         return "Product Updated";
     }
 
     public List<VariationDto> findAllProductVariations(Integer productId) {
         Product product = findProduct(productId);
-        List<Product> variations = productRepo.findByName(product.getName());
+        List<Product> variations = productRepository.findByName(product.getName());
 //        System.out.println(variations.get(0).getName());
         List<VariationDto> variationDtos= new ArrayList<>();
         for (Product variation: variations){
@@ -182,17 +178,17 @@ public class ProductService {
     }
 
     public List<Product> findSimilarProduct(Integer productId) {
-        Optional<Product> productOptional=productRepo.findById(productId);
-        List<Product> similarProduct = productRepo.findByCategory(productOptional.get().getCategory());
+        Optional<Product> productOptional= productRepository.findById(productId);
+        List<Product> similarProduct = productRepository.findByCategory(productOptional.get().getCategory());
         return similarProduct;
         }
 
-    public ProductDTO findProductDTO(Integer productId) {
-        Product product = productRepo.findById(productId).get();
+    public ProductDto findProductDTO(Integer productId) {
+        Product product = productRepository.findById(productId).get();
         if (product == null) {
             throw new ProductNotFoundException("Invalid product Id " + productId);
         } else {
-            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+            ProductDto productDTO = modelMapper.map(product, ProductDto.class);
             productDTO.setMetaData(product.getMetaData());
             return productDTO;
         }
