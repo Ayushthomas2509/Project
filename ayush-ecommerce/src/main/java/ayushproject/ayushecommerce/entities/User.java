@@ -2,21 +2,22 @@ package ayushproject.ayushecommerce.entities;
 
 import ayushproject.ayushecommerce.security.GrantAuthorityImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import java.io.File;
 import java.util.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type",discriminatorType = DiscriminatorType.STRING)
-public class User implements UserDetails {
+@EntityListeners(AuditingEntityListener.class)
+public class User implements UserDetails  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
@@ -39,6 +40,13 @@ public class User implements UserDetails {
     private boolean enabled=false;
     private boolean deleted=false;
     private Integer failedAttempts=0;
+    @Temporal(TemporalType.DATE)
+    private Date updatePasswordDate;
+
+    @Column(name = "modified_date")
+    @LastModifiedDate
+    @Temporal(TemporalType.DATE)
+    private Date modifiedDate;
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
     List<String> authoritiesList;
@@ -48,6 +56,7 @@ public class User implements UserDetails {
         this.name = name;
         this.password = password;
         this.grantAuthorities = grantAuthorities;     }
+
 
     public User() {
     }
@@ -207,5 +216,21 @@ public class User implements UserDetails {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public Date getUpdatePasswordDate() {
+        return updatePasswordDate;
+    }
+
+    public void setUpdatePasswordDate(Date updatePasswordDate) {
+        this.updatePasswordDate = updatePasswordDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 }

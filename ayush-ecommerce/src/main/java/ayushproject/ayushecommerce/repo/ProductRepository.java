@@ -21,4 +21,7 @@ public interface ProductRepository extends CrudRepository<Product,Integer> {
     List<Product> findByCategory(Category category);
 
     List<Product> findByName(String name);
+
+    @Query(value = "select * from product where quantity<=2",nativeQuery = true)
+    List<Product> findAllByQuantity();
 }

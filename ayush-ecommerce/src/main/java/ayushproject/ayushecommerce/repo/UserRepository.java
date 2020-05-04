@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 @Repository
 public interface UserRepository extends CrudRepository<User,Integer> {
@@ -15,6 +16,11 @@ public interface UserRepository extends CrudRepository<User,Integer> {
     List<User> allUsers(Pageable pageable);
 
     User findByname(@Param("name") String name);
+
+//    @Query(value = "select * from user",nativeQuery = true)
+//    List<User> findAllByPasswordUpdatedDate();
+
+//    Object findAllByPasswordUpdatedDate(Date date);
 
 //    @Modifying
 //    @Transactional
