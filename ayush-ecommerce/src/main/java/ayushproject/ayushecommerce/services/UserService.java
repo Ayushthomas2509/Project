@@ -25,6 +25,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.time.LocalDate;
 import java.util.*;
 
 @Component
@@ -117,7 +118,7 @@ public class UserService {
         else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setAuthoritiesList(Arrays.asList("ROLE_SELLER"));
-            user.setUpdatePasswordDate(new Date());
+//            user.setCreatedDate(new Date());
             userRepository.save(user);
             activateAccount(user.getName());
             return messageSource.getMessage("seller.add.message", null, locale);
@@ -141,7 +142,7 @@ public class UserService {
             else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
-                user.setUpdatePasswordDate(new Date());
+//                user.setCreatedDate(new Date());
                 userRepository.save(user);
                 activateAccount(user.getName());
                 return messageSource.getMessage("customer.add.message",null,locale);
@@ -217,7 +218,7 @@ public class UserService {
 
         if (token!=null){
             User user = userRepository.findByname(token.getUser().getName());
-            user.setUpdatePasswordDate(new Date());
+//            user.setCreatedDate(new Date());
             passwordValidator.setPassword(newPassword);
             Set<ConstraintViolation<PasswordValidator>> constraintViolations=validate(passwordValidator);
             if (constraintViolations.size() > 0){

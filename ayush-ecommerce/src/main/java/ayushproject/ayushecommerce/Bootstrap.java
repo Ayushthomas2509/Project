@@ -19,6 +19,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.*;
 
 @Component
@@ -51,7 +52,7 @@ public class Bootstrap implements ApplicationRunner {
         admin1.setAdminid(301);
         admin1.setGender("M");
         admin1.setIs_active(true);
-      //  admin1.setUpdatePasswordDate(new Date());
+      //  admin1.setCreatedDate(new Date());
         admin1.setPassword(passwordEncoder.encode("Ayush@"));
         admin1.setName("ayushthomas09");
         admin1.setEmail("ayushthomas09@outlook.com");
@@ -71,7 +72,7 @@ public class Bootstrap implements ApplicationRunner {
         user1.setLastName("Kumar");
         user1.setName("KartikKumar25");
         user1.setEmail("ayush9005716605@gmail.com");
-        user1.setUpdatePasswordDate(new Date());
+        user1.setCreatedDate( LocalDate.now());
         user1.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
         File profilePic = new File("Static/image1.jpg");
         user1.setPassword(passwordEncoder.encode("Kartik@"));
@@ -85,7 +86,7 @@ public class Bootstrap implements ApplicationRunner {
         Seller seller1 = new Seller();
        seller1.setFirstName("Abhi");
         seller1.setLastName("Thomas");
-        seller1.setUpdatePasswordDate(new Date());
+        seller1.setCreatedDate( LocalDate.now());
         seller1.setPassword(passwordEncoder.encode("Abhi@"));
         seller1.setAuthoritiesList(Arrays.asList("ROLE_SELLER"));
         seller1.setAge(23);
@@ -214,9 +215,5 @@ public class Bootstrap implements ApplicationRunner {
         productRepository.save(shirt);
         productRepository.save(shirt1);
         productRepository.save(phone);
-
-
-
-
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -40,13 +41,14 @@ public class User implements UserDetails  {
     private boolean enabled=false;
     private boolean deleted=false;
     private Integer failedAttempts=0;
-    @Temporal(TemporalType.DATE)
-    private Date updatePasswordDate;
+    private boolean nonExpiredPassword=true;
+
+//    @CreatedDate
+    private LocalDate CreatedDate;
 
     @Column(name = "modified_date")
     @LastModifiedDate
-    @Temporal(TemporalType.DATE)
-    private Date modifiedDate;
+    private LocalDate modifiedDate;
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
     List<String> authoritiesList;
@@ -192,7 +194,7 @@ public class User implements UserDetails  {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return nonExpiredPassword;
     }
 
     @Override
@@ -218,19 +220,35 @@ public class User implements UserDetails  {
         this.confirmPassword = confirmPassword;
     }
 
-    public Date getUpdatePasswordDate() {
-        return updatePasswordDate;
+//    public Date getCreatedDate() {
+//        return CreatedDate;
+//    }
+//
+//    public void setCreatedDate(Date createdDate) {
+//        CreatedDate = createdDate;
+//    }
+
+    public boolean isNonExpiredPassword() {
+        return nonExpiredPassword;
     }
 
-    public void setUpdatePasswordDate(Date updatePasswordDate) {
-        this.updatePasswordDate = updatePasswordDate;
+    public void setNonExpiredPassword(boolean nonExpiredPassword) {
+        this.nonExpiredPassword = nonExpiredPassword;
     }
 
-    public Date getModifiedDate() {
+    public LocalDate getCreatedDate() {
+        return CreatedDate;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
+        CreatedDate = createdDate;
+    }
+
+    public LocalDate getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(Date modifiedDate) {
+    public void setModifiedDate(LocalDate modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 }

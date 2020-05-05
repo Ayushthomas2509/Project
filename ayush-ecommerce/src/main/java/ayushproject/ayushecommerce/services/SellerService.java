@@ -18,6 +18,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +53,8 @@ public class SellerService {
 
     public String updatePassword(String newPassword,String oldPassword,String name){
         User user= userRepository.findByname(name);
-        user.setUpdatePasswordDate(new Date());
+        Date date=new Date();
+        user.setCreatedDate( LocalDate.now());
         if(passwordEncoder.matches(oldPassword,user.getPassword())) {
             Set<ConstraintViolation<PasswordValidator>> constraintViolations = validate(passwordValidator);
             if (constraintViolations.size() > 0) {
