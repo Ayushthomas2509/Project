@@ -19,7 +19,7 @@ public class CategoryController {
 
     Logger logger= LoggerFactory.getLogger(CategoryController.class);
 
-    @GetMapping("/Category")
+    @RequestMapping(value = "/Category",method = RequestMethod.GET)
     public Iterable<Category> findAll(){
         logger.info("Method Is Accessed");
         userService.ensureUser();

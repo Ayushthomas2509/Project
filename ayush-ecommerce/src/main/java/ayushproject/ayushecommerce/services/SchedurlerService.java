@@ -49,7 +49,7 @@ public class SchedurlerService {
     }
 
     @Scheduled(cron = "0 0 12 */1 * ?")
-    public void passwordExpired() {
+    public void passwordExpirationMailService() {
         List<User> userList = (List<User>) userRepository.findAll();
         for (User user : userList) {
             LocalDate currentDate =  LocalDate.now();

@@ -2,7 +2,6 @@ package ayushproject.ayushecommerce.entities;
 
 import ayushproject.ayushecommerce.security.GrantAuthorityImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -232,8 +231,9 @@ public class User implements UserDetails  {
         return nonExpiredPassword;
     }
 
-    public void setNonExpiredPassword(boolean nonExpiredPassword) {
+    public boolean setNonExpiredPassword(boolean nonExpiredPassword) {
         this.nonExpiredPassword = nonExpiredPassword;
+        return nonExpiredPassword;
     }
 
     public LocalDate getCreatedDate() {

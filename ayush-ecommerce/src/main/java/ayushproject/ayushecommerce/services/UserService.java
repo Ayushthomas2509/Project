@@ -194,6 +194,8 @@ public class UserService {
             User user = userRepository.findByname(token.getUser().getName());
             user.setFailedAttempts(0);
             user.setEnabled(true);
+            user.setNonExpiredPassword(false);
+            user.setCreatedDate(LocalDate.now());
             userRepository.save(user);
 //            sendMail(user,"Account-Activation");
             return "Account Activated";
