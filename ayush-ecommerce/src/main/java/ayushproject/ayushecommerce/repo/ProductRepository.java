@@ -24,4 +24,7 @@ public interface ProductRepository extends CrudRepository<Product,Integer> {
 
     @Query(value = "select * from product where quantity<=2",nativeQuery = true)
     List<Product> findAllByQuantity();
+
+    @Query(value = "select count(*) as c, category_id from product group by category_id",nativeQuery =  true)
+    List<Integer[]> countByCategoryId();
 }

@@ -17,7 +17,7 @@
 
 </head>
 <body>
-
+<div class="jumbotron">
 <h2>List of Categories</h2>
 
 <table class="table table-stripped">
@@ -25,13 +25,37 @@
     <tr>
         <td>Id</td>
         <td>Name</td>
+        <td>Product count</td>
     </tr>
     </thead>
 
-    <tr th:each="category:${category}">
-        <td th:text="${category.name}">name</td>
+    <tr th:each="categoryProductDtos:${categoryProductDtos}">
+        <td th:text="${categoryProductDtos.id}">id</td>
+        <td th:text="${categoryProductDtos.name}">name</td>
+        <td th:text="${categoryProductDtos.count}">Product count</td>
+
     </tr>
 </table>
+</div>
+<div class="jumbotron">
+<h2>List of Products</h2>
+
+<table class="table table-stripped">
+    <thead>
+    <tr>
+        <td>Id</td>
+        <td>Product Name</td>
+        <td>Quantity</td>
+    </tr>
+    </thead>
+
+    <tr th:each="categoryProductDtos:${categoryProductDtos}">
+        <td th:text="${categoryProductDtos.productId}">id</td>
+        <td th:text="${categoryProductDtos.productName}">Product Name</td>
+        <td th:text="${categoryProductDtos.quantity}">Quantity</td>
+
+    </tr>
+</table></div>
 
 
 </body>

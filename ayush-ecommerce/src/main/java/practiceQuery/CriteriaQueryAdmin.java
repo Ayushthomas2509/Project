@@ -21,7 +21,7 @@ class CriteriaQueryAdmin implements UserDao{
 //
 //    }
 
-    @Override
+
     public User findById(Integer id) {
         CriteriaBuilder criteriaBuilder=entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery=criteriaBuilder.createQuery(User.class);
