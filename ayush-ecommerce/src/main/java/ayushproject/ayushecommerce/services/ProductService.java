@@ -36,6 +36,8 @@ public class ProductService {
     CategoryFeildValueRepository categoryFeildValueRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    ActivityLogService activityLogService;
 
     public User getLoggedInCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -46,6 +48,7 @@ public class ProductService {
     }
 
     public Iterable<Product> allProducts() {
+        activityLogService.activityLog("View all products","product",null);
         return productRepository.findAll();
     }
 

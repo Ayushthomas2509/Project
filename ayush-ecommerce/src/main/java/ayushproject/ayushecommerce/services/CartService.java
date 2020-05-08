@@ -17,8 +17,6 @@ public class CartService {
     ProductRepository productRepository;
     @Autowired
     CartRepository cartRepository;
-    @Autowired
-    UserRepository userRepository;
 
     public Iterable<Cart> allcarts(){ return cartRepository.findAll();}
     public Iterable<Cart> viewCart(Integer userid){return cartRepository.findByuserid(userid);}

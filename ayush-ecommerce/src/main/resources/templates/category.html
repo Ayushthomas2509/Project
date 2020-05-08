@@ -17,7 +17,7 @@
 
 </head>
 <body>
-<div class="jumbotron">
+<div class="jumbotron" style="background-color:aqua">
 <h2>List of Categories</h2>
 
 <table class="table table-stripped">
@@ -30,14 +30,14 @@
     </thead>
 
     <tr th:each="categoryProductDtos:${categoryProductDtos}">
-        <td th:text="${categoryProductDtos.id}">id</td>
-        <td th:text="${categoryProductDtos.name}">name</td>
-        <td th:text="${categoryProductDtos.count}">Product count</td>
+        <td th:text="${categoryProductDtos.id}" style="background-color:green">id</td>
+        <td th:text="${categoryProductDtos.name}" style="background-color:white">name</td>
+        <td th:text="${categoryProductDtos.count}" style="background-color:orange">Product count</td>
 
     </tr>
 </table>
 </div>
-<div class="jumbotron">
+<div class="jumbotron" style="background-color:aqua">
 <h2>List of Products</h2>
 
 <table class="table table-stripped">
@@ -50,9 +50,9 @@
     </thead>
 
     <tr th:each="categoryProductDtos:${categoryProductDtos}">
-        <td th:text="${categoryProductDtos.productId}">id</td>
-        <td th:text="${categoryProductDtos.productName}">Product Name</td>
-        <td th:text="${categoryProductDtos.quantity}">Quantity</td>
+        <td th:text="${categoryProductDtos.productId}" style="background-color:orange">id</td>
+        <td th:text="${categoryProductDtos.productName}" style="background-color:white">Product Name</td>
+        <td th:text="${categoryProductDtos.quantity}" style="background-color:green">Quantity</td>
 
     </tr>
 </table></div>
