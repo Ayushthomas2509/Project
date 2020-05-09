@@ -54,6 +54,7 @@ public class ProductService {
 
 
     public List<Product> perCategory(Integer category) {
+        activityLogService.activityLog("View All Products by Category","product",null);
         Optional<Category> category1= categoryRepository.findById(category);
         return productRepository.perCategory(category1.get());
     }
@@ -66,6 +67,7 @@ public class ProductService {
             throw new InvalidFieldException("Quantity Should Be Entered");
         }
         sendMail(admin, "Product Activation", product);
+        activityLogService.activityLog("Product Added","product",null);
         return "Product Added..";
     }
 
@@ -74,11 +76,13 @@ public class ProductService {
         if (productId == null) {
             throw new ProductNotFoundException("Invalid Product" + productId);
         } else {
+            activityLogService.activityLog("Single Product Is Displayed","product",null);
             return product;
         }
     }
 
     public String editProduct(Product product) {
+        activityLogService.activityLog("Product Is Edited","product",null);
         productRepository.save(product);
         return "Product Updated";
     }
@@ -99,6 +103,7 @@ public class ProductService {
 
     public String removeProduct(Integer productId) {
         Product product = (productRepository.findById(productId).get());
+        activityLogService.activityLog("Product Is Removed","product",null);
         product.setDeleted(true);
         productRepository.save(product);
         return "Product deleted";
@@ -106,6 +111,7 @@ public class ProductService {
 
     public String enableProduct(Integer productId) {
         Product product = findProduct(productId);
+        activityLogService.activityLog("Product is Enabled","product",null);
         product.setActive(true);
         return "Product Activated";
     }
@@ -127,6 +133,7 @@ public class ProductService {
             productOptional.get().setPrice(product.getPrice());
         productOptional.get().setSellerId(user.getId());
         productRepository.save(productOptional.get());
+        activityLogService.activityLog("Product is Updated","product",null);
         return "PRODUCT UPDATED";
 
     }
@@ -145,10 +152,12 @@ public class ProductService {
     public String disableProduct(Integer productId) {
     Product product = findProduct(productId);
         product.setActive(false);
+        activityLogService.activityLog("Product is disabled","product",null);
         return "Product De-Activated";
     }
 
     public String addProductVariation(Integer productId, VariationDto variationDto) {
+        activityLogService.activityLog("Product Variation Is Added","product",null);
         Product product = findProduct(productId);
         Product product1= new Product();
         List<Product> productList = (List<Product>) productRepository.findAll();
@@ -169,6 +178,7 @@ public class ProductService {
     }
 
     public List<VariationDto> findAllProductVariations(Integer productId) {
+        activityLogService.activityLog("All Product Variations are Displayed","product",null);
         Product product = findProduct(productId);
         List<Product> variations = productRepository.findByName(product.getName());
 //        System.out.println(variations.get(0).getName());
@@ -181,12 +191,14 @@ public class ProductService {
     }
 
     public List<Product> findSimilarProduct(Integer productId) {
+        activityLogService.activityLog("Similar Products Are displayed","product",null);
         Optional<Product> productOptional= productRepository.findById(productId);
         List<Product> similarProduct = productRepository.findByCategory(productOptional.get().getCategory());
         return similarProduct;
         }
 
     public ProductDto findProductDTO(Integer productId) {
+        activityLogService.activityLog("Single Product Is Searched and displayed","product",null);
         Product product = productRepository.findById(productId).get();
         if (product == null) {
             throw new ProductNotFoundException("Invalid product Id " + productId);

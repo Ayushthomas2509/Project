@@ -1,0 +1,47 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Category list</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/starter-template/">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+<div class="jumbotron" style="background-color:#d9177f">
+    <h2 style="color:white">List of Products</h2>
+
+    <table class="table table-stripped">
+        <thead>
+        <tr style="background-color:#337ab7; color:white; font-weight: bold">
+            <td >Id</td>
+            <td>Name</td>
+            <td>Brand</td>
+            <td>Seller</td>
+            <td>Category</td>
+            <!--            <td>Product count</td>-->
+        </tr>
+        </thead>
+
+        <tr th:each="productList:${productList}">
+            <td th:text="${productList.id}" style="background-color:grey; color:white">id</td>
+            <td th:text="${productList.name}" style="background-color:white; color:grey">name</td>
+            <td th:text="${productList.brand}" style="background-color:grey; color:white">brand</td>
+            <td th:text="${productList.sellerId}" style="background-color:white; color:grey">seller</td>
+            <td th:text="${productList.category.id}" style="background-color:grey; color:white">category</td>
+
+        </tr>
+
+    </table>
+</div>
+</body>
+</html>

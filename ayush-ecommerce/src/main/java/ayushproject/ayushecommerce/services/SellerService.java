@@ -10,6 +10,8 @@ import ayushproject.ayushecommerce.repo.SellerRepository;
 import ayushproject.ayushecommerce.repo.UserRepository;
 import ayushproject.ayushecommerce.security.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -35,8 +37,19 @@ public class SellerService {
     @Autowired
     PasswordValidator passwordValidator;
     PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+    @Autowired
+    ActivityLogService activityLogService;
+
+    public User getLoggedInCustomer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDetail = (User) authentication.getPrincipal();
+        String username = userDetail.getUsername();
+        User user = userRepository.findByname(username);
+        return user;
+    }
 
     public Iterable<Seller> viewAll(){
+        activityLogService.activityLog("Seller is Displayed","seller",null);
         return sellerRepository.findAll();
     }
 

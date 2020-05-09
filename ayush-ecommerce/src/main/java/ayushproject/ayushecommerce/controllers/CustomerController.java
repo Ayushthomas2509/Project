@@ -2,6 +2,7 @@ package ayushproject.ayushecommerce.controllers;
 
 import ayushproject.ayushecommerce.entities.Address;
 import ayushproject.ayushecommerce.entities.Customer;
+import ayushproject.ayushecommerce.services.ActivityLogService;
 import ayushproject.ayushecommerce.services.CustomerService;
 import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,10 @@ public class CustomerController {
 UserService userService;
 @Autowired
 CustomerService customerService;
+@Autowired
+    ActivityLogService activityLogService;
+
+
 
 @GetMapping("/customers")
     public Iterable<Customer> viewAll(){

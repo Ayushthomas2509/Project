@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,7 +52,9 @@ public class UserService {
     @Autowired
     PasswordValidator passwordValidator;
     @Autowired
-    private MessageSource messageSource;;
+    private MessageSource messageSource;
+    @Autowired
+    ActivityLogService activityLogService;
 
     @PreAuthorize("hasRole('ADMIN')")
     public boolean ensureAdmin(){return true;
@@ -70,23 +74,36 @@ public class UserService {
     @PreAuthorize("hasRole('CUSTOMER')||hasRole('ADMIN')")
     public boolean ensureCustomerOrAdmin(){return true;}
 
+    public User getLoggedInCustomer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDetail = (User) authentication.getPrincipal();
+        String username = userDetail.getUsername();
+        User user = userRepository.findByname(username);
+        return user;
+    }
 
-    public Iterable<User> allUsers(Integer offset, Integer size){return userRepository.allUsers(PageRequest.of(offset,size, Sort.Direction.ASC,"id"));}
+
+    public Iterable<User> allUsers(Integer offset, Integer size){
+        activityLogService.activityLog("All Users are Displayed","user",null);
+        return userRepository.allUsers(PageRequest.of(offset,size, Sort.Direction.ASC,"id"));}
 
     public User findUser(String name){return userRepository.findByname(name);}
 
     public String addUser(User user){
+        activityLogService.activityLog("User is added","user",null);
         userRepository.save(user);
         return "User added";
 
     }
 
     public String deleteUser(String name) {
+        activityLogService.activityLog("User is deleted","user",null);
         userRepository.delete(userRepository.findByname(name));
         return "User Deleted";
     }
 
     public String editUser(User user) {
+        activityLogService.activityLog("User is edited","user",null);
         userRepository.save(user);
         return "User Updated";
     }
@@ -107,6 +124,7 @@ public class UserService {
     }
 
     public String addSeller(Seller user, Locale locale){
+        activityLogService.activityLog("Seller is Added","user",null);
         if (userRepository.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("not found"); }
         passwordValidator.setPassword(user.getPassword());
@@ -128,6 +146,7 @@ public class UserService {
     }
 
     public String addCustomer(Customer user,Locale locale){
+        activityLogService.activityLog("Customer is Added","user",null);
         if (userRepository.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("Customer Already Exsists");
         }
@@ -180,6 +199,7 @@ public class UserService {
      }
 
     public String activateAccount(String name) {
+        activityLogService.activityLog("Account Activation Mail is Send","user",null);
         User newUser = userRepository.findByname(name);
         if (newUser != null) {
             sendMail(newUser,"Account-Activation");
@@ -239,6 +259,7 @@ public class UserService {
     }
 
     public String enableSeller(String name){
+        activityLogService.activityLog("Enabled","user",null);
         User user= userRepository.findByname(name);
         if (user != null){
             user.setEnabled(true);
@@ -253,6 +274,7 @@ public class UserService {
 
 
     public String disableUser(String name) {
+        activityLogService.activityLog("Disabled","user",null);
         User user = userRepository.findByname(name);
         if (user != null) {
             user.setEnabled(false);

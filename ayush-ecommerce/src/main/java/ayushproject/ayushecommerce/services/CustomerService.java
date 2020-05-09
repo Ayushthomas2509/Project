@@ -33,6 +33,8 @@ public class CustomerService {
    @Autowired
    PasswordValidator passwordValidator;
    PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+   @Autowired
+   ActivityLogService activityLogService;
 
     public User getLoggedInCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,17 +44,22 @@ public class CustomerService {
         return user;
     }
 
-   public Iterable<Customer> allCustomers(){
-       return customerRepository.findAll();
+   public Iterable<Customer> allCustomers()
+
+   {        activityLogService.activityLog("Customer is Displayed","customer",null);
+            return customerRepository.findAll();
    }
 
    public Customer myProfile(){
         User user=getLoggedInCustomer();
-       return customerRepository.findByname(user.getName());
+        activityLogService.activityLog("Customer Profile is Displayed","customer",null);
+
+           return customerRepository.findByname(user.getName());
    }
 
    public List<Address> viewAdress(){
-       Customer customer = customerRepository.findByname(getLoggedInCustomer().getName());
+        activityLogService.activityLog("Customer Address is Displayed","customer",null);
+           Customer customer = customerRepository.findByname(getLoggedInCustomer().getName());
        System.out.println("Address Is - ");
         return customer.getAddress();
    }
@@ -65,7 +72,8 @@ public class CustomerService {
    }
 
    public List<Address> editAddress(Address address,Integer addressId){
-       Customer customer= customerRepository.findByname(getLoggedInCustomer().getName());
+        activityLogService.activityLog("Address is added","customer",null);
+           Customer customer= customerRepository.findByname(getLoggedInCustomer().getName());
         customer.getAddress().get(addressId).setPincode(address.getPincode());
        customer.getAddress().get(addressId).setCountry(address.getCountry());
        customer.getAddress().get(addressId).setCity(address.getCity());
@@ -77,16 +85,18 @@ public class CustomerService {
    }
 
    public List<Address> deleteAddress(Integer addressId,String name){
-       Customer customer= customerRepository.findByname(name);
-       List<Address> addressList=customer.getAddress();
-       addressList.remove(addressId);
-       customer.setAddress(addressList);
-       customerRepository.save(customer);
-       return customer.getAddress();
+        activityLogService.activityLog("Address is Deleted","customer",null);
+        Customer customer= customerRepository.findByname(name);
+        List<Address> addressList=customer.getAddress();
+        addressList.remove(addressId);
+        customer.setAddress(addressList);
+        customerRepository.save(customer);
+        return customer.getAddress();
    }
 
    public String updatePassword(String name, String newPassword, String oldPassword) {
-       User user = userRepository.findByname(name);
+        activityLogService.activityLog("Password is updated","customer",null);
+        User user = userRepository.findByname(name);
        user.setCreatedDate( LocalDate.now());
        if (passwordEncoder.matches(oldPassword, user.getPassword())) {
            passwordValidator.setPassword(newPassword);

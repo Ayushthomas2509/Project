@@ -17,12 +17,12 @@
 
 </head>
 <body>
-<div class="jumbotron" style="background-color:aqua">
+<div class="jumbotron" style="background-color:#d9177f">
 <h2>List of Categories</h2>
 
 <table class="table table-stripped">
     <thead>
-    <tr>
+    <tr style="background-color:#337ab7; color:white; font-weight: bold">
         <td>Id</td>
         <td>Name</td>
         <td>Product count</td>
@@ -30,9 +30,9 @@
     </thead>
 
     <tr th:each="categoryProductDtos:${categoryProductDtos}">
-        <td th:text="${categoryProductDtos.id}" style="background-color:green">id</td>
-        <td th:text="${categoryProductDtos.name}" style="background-color:white">name</td>
-        <td th:text="${categoryProductDtos.count}" style="background-color:orange">Product count</td>
+        <td th:text="${categoryProductDtos.id}" style="background-color:grey; color:white">id</td>
+        <td th:text="${categoryProductDtos.name}" style="background-color:grey; color:grey">name</td>
+        <td th:text="${categoryProductDtos.count}" style="background-color:grey; color:white">Product count</td>
 
     </tr>
 </table>

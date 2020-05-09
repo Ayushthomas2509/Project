@@ -2,6 +2,7 @@ package ayushproject.ayushecommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -14,6 +15,7 @@ import java.util.Locale;
 @SpringBootApplication
 @EnableAsync
 @EnableScheduling
+@EnableCaching
 public class AyushEcommerceApplication {
 
 	public static void main(String[] args) {

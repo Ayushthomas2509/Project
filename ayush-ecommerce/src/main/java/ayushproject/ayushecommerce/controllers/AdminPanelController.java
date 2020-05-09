@@ -26,11 +26,11 @@ public class AdminPanelController {
     @Autowired
     ProductRepository productRepository;
 
-    @RequestMapping(value = "/index")
-    public String index() {
-        return "index";
-    }
+//    @RequestMapping(value = "/index")
+//    public String index() {
+//        return "index";
 //    }
+////    }
 
     @RequestMapping(value = "/AdminPanel", method = RequestMethod.GET)
     public String count(Model model) {
