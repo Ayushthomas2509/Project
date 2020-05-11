@@ -7,31 +7,38 @@ import ayushproject.ayushecommerce.entities.Product;
 //import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
 import ayushproject.ayushecommerce.services.ProductService;
 import ayushproject.ayushecommerce.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.Serializable;
 import java.util.List;
 
 @RestController
-public class ProductController {
+public class ProductController  {
 
     @Autowired
     ProductService productService;
     @Autowired
     UserService userService;
-    @Cacheable(value = "product", key = "#id")
+
+    private static final Logger logger= LoggerFactory.getLogger(UserController.class);
+    @Cacheable(value = "product")
     @GetMapping("/products")
     public Iterable<Product> allProducts(){
+        logger.info("Success");
         return productService.allProducts();
     }
 
-    @Cacheable(value = "product", key = "#id")
+   // @Cacheable(value = "product")
     @GetMapping("/products/{category}")
     public List<Product> perCategory(@PathVariable Integer category){
         userService.ensureUser();
+        logger.info("product serach by category success");
         return productService.perCategory(category);
     }
 
@@ -61,14 +68,14 @@ public class ProductController {
         return productService.editElectronicsProduct(id,product);
     }
 
-    @Cacheable(value = "product", key = "#id")
+    @Cacheable(value = "product")
     @GetMapping("/enable-product/{id}")
     public String enableProduct(@PathVariable Integer id){
         userService.ensureSeller();
         return productService.enableProduct(id);
     }
 
-    @Cacheable(value = "product", key = "#id")
+    @Cacheable(value = "product")
     @GetMapping("/disable-product/{id}")
     public String disableProduct(@PathVariable Integer id){
         userService.ensureSeller();
@@ -80,17 +87,17 @@ public class ProductController {
         return productService.addProductVariation(productId,variation);
     }
 
-    @Cacheable(value = "product", key = "#id")
+    @Cacheable(value = "product")
     @GetMapping("/products/{productId}/products-variations")
     public List<VariationDto> findAllProductVariations(@PathVariable Integer productId){
         return productService.findAllProductVariations(productId);
     }
-    @Cacheable(value = "product", key = "#id")
+    @Cacheable(value = "product")
     @GetMapping("/products/{productId}/similar-products")
     public List<Product> findSimilarProduct(@PathVariable Integer productId){
         return productService.findSimilarProduct(productId);
     }
-    @Cacheable(value = "product", key = "#id")
+    @Cacheable(value = "product")
     @GetMapping("/productsDTO/{productId}")
     public ProductDto findProductDTO(@PathVariable Integer productId){
         return productService.findProductDTO(productId);

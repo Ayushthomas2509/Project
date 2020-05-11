@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.util.Locale;
 
 @RestController
-public class UserController {
+public class UserController implements Serializable {
     @Autowired
     UserService userService;
     @Autowired
@@ -30,7 +31,7 @@ public class UserController {
 
     private static final Logger logger=LoggerFactory.getLogger(UserController.class);
 
-    @Cacheable(value = "user", key = "#Id")
+    @Cacheable(value = "user")
     @GetMapping("/users/{offset}/{size}")
     public Iterable<User> allUsers(@PathVariable Integer offset,@PathVariable Integer size){
         logger.info("Method Accessed");
@@ -38,15 +39,15 @@ public class UserController {
         return userService.allUsers(offset,size);
     }
 
-    @Cacheable(value = "user", key = "#name")
+    @Cacheable(value = "user")
     @GetMapping("users/{name}")
     public User findUser(@PathVariable String name)
     {     userService.ensureUser();
          return userService.findUser(name);
     }
 
-    @Cacheable(value = "user", key = "#Id")
-    @GetMapping("users/edit")
+//    @Cacheable(value = "user", key = "#Id")
+    @PutMapping("users/edit")
     public String editUser(@RequestBody User user){
         userService.ensureUser();
         return userService.editUser(user);

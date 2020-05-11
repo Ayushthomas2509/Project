@@ -1,9 +1,10 @@
 package ayushproject.ayushecommerce.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class CategoryField {
+public class CategoryField implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

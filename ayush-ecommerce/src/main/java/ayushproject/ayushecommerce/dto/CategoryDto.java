@@ -3,9 +3,10 @@ package ayushproject.ayushecommerce.dto;
 import ayushproject.ayushecommerce.entities.Category;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
-public class CategoryDto {
+public class CategoryDto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

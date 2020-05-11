@@ -1,12 +1,15 @@
 package ayushproject.ayushecommerce.entities;
 
 import ayushproject.ayushecommerce.enums.InStock;
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,26 +18,34 @@ import java.util.Map;
 //@Inheritance(strategy = InheritanceType.JOINED)
 @EntityListeners(AuditingEntityListener.class)
 //@DiscriminatorColumn(name = "Category",discriminatorType = DiscriminatorType.STRING)
-public class Product {
+
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
     private Integer id;
     @NotNull
+    @Audited
     private String name;
+    @Audited
     private String brand;
     @NotNull
+    @Audited
     private Integer quantity;
     @Enumerated(EnumType.STRING)
     private InStock inStock;
 //    private Integer categoryId;
+    @Audited
     private String description;
     private Boolean isDeleted=false;
     private Boolean isActive=false;
+    @Audited
     private Integer price;
     private Integer sellerId;
     @Convert(converter = HashMapConverter.class)
     @Column(columnDefinition = "json")
+    @Audited
     private Map<String,String> metaData;
+    @Audited
     private String productImage;
 
     @ElementCollection
@@ -47,14 +58,12 @@ public class Product {
     @Column(name = "modified_date")
     @LastModifiedDate
     private Date modifiedDate;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
 //    @ManyToOne
 //    private Seller seller;
-
     @OneToMany(cascade = CascadeType.ALL)
     public List<Reviews> reviews;
 

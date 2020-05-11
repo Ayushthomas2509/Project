@@ -2,6 +2,7 @@ package ayushproject.ayushecommerce.entities;
 
 import ayushproject.ayushecommerce.security.GrantAuthorityImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -17,38 +19,52 @@ import java.util.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type",discriminatorType = DiscriminatorType.STRING)
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails  {
+public class User implements UserDetails , Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
     @NotNull(message = "name cannot be empty")
+//    @Audited
     private String name;
+//    @Audited
     private Date dob;
     @Transient
     @JsonIgnore
     private String confirmPassword;
+//    @Audited
     @NotNull(message = "First name cannot be null")
     protected String firstName;
     @Email
+//    @Audited
     @Column(unique = true)
     private String email;
+//    @Audited
     private String lastName;
+//    @Audited
     private String gender;
+//    @Audited
     private Integer age;
+//    @Audited
     @NotNull(message = "Password Cannot Be Null")
     private String password;
+//    @Audited
     private boolean enabled=false;
+//    @Audited
     private boolean deleted=false;
+//    @Audited
     private Integer failedAttempts=0;
+//    @Audited
     private boolean nonExpiredPassword=true;
 
 //    @CreatedDate
+//    @Audited
     private LocalDate CreatedDate;
 
     @Column(name = "modified_date")
     @LastModifiedDate
     private LocalDate modifiedDate;
     @JsonIgnore
+//    @Audited
     @ElementCollection(fetch = FetchType.EAGER)
     List<String> authoritiesList;
     @ElementCollection

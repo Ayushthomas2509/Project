@@ -18,10 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.*;
 
 @Component
-public class ProductService {
+public class ProductService  {
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -48,7 +49,7 @@ public class ProductService {
     }
 
     public Iterable<Product> allProducts() {
-        activityLogService.activityLog("View all products","product",null);
+        //activityLogService.activityLog("View all products","product",null);
         return productRepository.findAll();
     }
 
@@ -198,7 +199,6 @@ public class ProductService {
         }
 
     public ProductDto findProductDTO(Integer productId) {
-        activityLogService.activityLog("Single Product Is Searched and displayed","product",null);
         Product product = productRepository.findById(productId).get();
         if (product == null) {
             throw new ProductNotFoundException("Invalid product Id " + productId);

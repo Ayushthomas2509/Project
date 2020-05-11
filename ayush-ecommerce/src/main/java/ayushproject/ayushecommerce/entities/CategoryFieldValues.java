@@ -3,10 +3,11 @@ package ayushproject.ayushecommerce.entities;
 import javax.persistence.ElementCollection;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class CategoryFieldValues {
+public class CategoryFieldValues implements Serializable {
     @EmbeddedId
     private CompositeKeyFieldValues id;
     @ElementCollection

@@ -1,12 +1,13 @@
 package ayushproject.ayushecommerce.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
 @Entity
 @DiscriminatorValue("Seller")
-public class Seller extends User {
+public class Seller extends User implements Serializable {
    //     private Integer sellerId;
         private Integer GST_No;
         @Embedded

@@ -103,7 +103,7 @@ public class UserService {
     }
 
     public String editUser(User user) {
-        activityLogService.activityLog("User is edited","user",null);
+        activityLogService.activityLog("User is edited","user",user.getId());
         userRepository.save(user);
         return "User Updated";
     }
@@ -124,7 +124,7 @@ public class UserService {
     }
 
     public String addSeller(Seller user, Locale locale){
-        activityLogService.activityLog("Seller is Added","user",null);
+        //activityLogService.activityLog("Seller is Added","user",null);
         if (userRepository.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("not found"); }
         passwordValidator.setPassword(user.getPassword());
@@ -146,7 +146,7 @@ public class UserService {
     }
 
     public String addCustomer(Customer user,Locale locale){
-        activityLogService.activityLog("Customer is Added","user",null);
+//        activityLogService.activityLog("Customer is Added","user",null);
         if (userRepository.findByname(user.getName())!=null){
             throw new UsernameNotFoundException("Customer Already Exsists");
         }
@@ -199,7 +199,7 @@ public class UserService {
      }
 
     public String activateAccount(String name) {
-        activityLogService.activityLog("Account Activation Mail is Send","user",null);
+        //activityLogService.activityLog("Account Activation Mail is Send","user",null);
         User newUser = userRepository.findByname(name);
         if (newUser != null) {
             sendMail(newUser,"Account-Activation");

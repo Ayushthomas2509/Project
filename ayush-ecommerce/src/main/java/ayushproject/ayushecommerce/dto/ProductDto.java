@@ -2,9 +2,10 @@ package ayushproject.ayushecommerce.dto;
 
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class ProductDto {
+public class ProductDto implements Serializable {
     private Integer id;
     private String name;
     private String brand;
