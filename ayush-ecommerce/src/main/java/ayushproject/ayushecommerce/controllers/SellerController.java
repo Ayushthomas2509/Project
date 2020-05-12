@@ -6,6 +6,7 @@ import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.services.SellerService;
 import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class SellerController {
     @Autowired
     SellerService sellerService;
 
+    //@Cacheable(value = "seller");
     @GetMapping("sellers")
     public Iterable<Seller> viewAll(){
         userService.ensureUser();

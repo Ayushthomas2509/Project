@@ -4,7 +4,9 @@ import ayushproject.ayushecommerce.entities.Cart;
 import ayushproject.ayushecommerce.entities.Orders;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.enums.Status;
+import ayushproject.ayushecommerce.rabbitmq.RabbitMQConfiguration;
 import ayushproject.ayushecommerce.repo.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +27,8 @@ public class OrderService {
     CartRepository cartRepository;
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     public Iterable<Orders> findAll(){
         return orderRepository.findAll();
@@ -54,6 +58,10 @@ public class OrderService {
 
         order.setAddress(customerRepository.findById(userid).get().getAddress().get(address));
         order.setOrderstatus(Status.Placed);
+        System.out.println("Sending message...");
+        rabbitTemplate.convertAndSend(RabbitMQConfiguration.topicExchangeName,
+                "message_routing_key", "Order is Placed"+order.getOrderstatus());
+        System.out.println("Message sent successfully...");
         orderRepository.save(order);
         return "Order Placed";
     }

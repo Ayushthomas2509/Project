@@ -53,8 +53,7 @@ public class CustomerService {
    public Customer myProfile(){
         User user=getLoggedInCustomer();
         activityLogService.activityLog("Customer Profile is Displayed","customer",null);
-
-           return customerRepository.findByname(user.getName());
+        return customerRepository.findByname(user.getName());
    }
 
    public List<Address> viewAdress(){

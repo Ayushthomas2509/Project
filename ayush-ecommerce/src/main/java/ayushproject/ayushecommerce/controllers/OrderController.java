@@ -21,7 +21,7 @@ public class OrderController {
         return orderService.findAll();
     }
 
-    @PostMapping("/{userId}/order")
+    @RequestMapping(value = "/{userid}/order", method = RequestMethod.POST)
     public String placeOrder(@PathVariable Integer userid, @RequestParam Integer address){
         userService.ensureCustomerOrAdmin();
         return orderService.placeOrder(userid,address);
