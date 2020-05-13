@@ -39,16 +39,9 @@ public class CriteriaController {
 
     @RequestMapping(value = "/admin/product/count", method = RequestMethod.GET)
     public String getProductCount(Model model){
-        List<Integer[]> productCount = criteriaQueryAdmin.getProductCount();
-        List<ProductCount> productCountList=new ArrayList<>();
-        for(Integer[] count: productCount){
-            ProductCount productCount1=new ProductCount();
-            productCount1.setCount(count[0]);
-            System.out.println(count[0]+" yoo bro "+count[1]);
-            productCountList.add(productCount1);
-        }
+        List<ProductCount> productCount = criteriaQueryAdmin.getProductCount();
         System.out.println(productCount);
-        model.addAttribute("productCountList", productCountList);
+        model.addAttribute("productCount", productCount);
         return "ProductCount";
     }
 

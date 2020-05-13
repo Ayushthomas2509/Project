@@ -1,6 +1,7 @@
 package ayushproject.ayushecommerce.entities;
 
 import ayushproject.ayushecommerce.enums.Status;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +14,9 @@ public class Orders implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer orderid;
+    @Audited
     private Status orderstatus;
+    @Audited
     private Date orderdate;
     @Embedded
     private Address address;

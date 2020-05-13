@@ -24,40 +24,36 @@ public class User implements UserDetails , Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Integer id;
     @NotNull(message = "name cannot be empty")
-//    @Audited
+   @Audited
     private String name;
 //    @Audited
     private Date dob;
     @Transient
     @JsonIgnore
     private String confirmPassword;
-//    @Audited
+    @Audited
     @NotNull(message = "First name cannot be null")
     protected String firstName;
     @Email
-//    @Audited
+    @Audited
     @Column(unique = true)
     private String email;
-//    @Audited
+    @Audited
     private String lastName;
-//    @Audited
+    @Audited
     private String gender;
-//    @Audited
+    @Audited
     private Integer age;
 //    @Audited
     @NotNull(message = "Password Cannot Be Null")
     private String password;
-//    @Audited
+   @Audited
     private boolean enabled=false;
-//    @Audited
     private boolean deleted=false;
-//    @Audited
     private Integer failedAttempts=0;
-//    @Audited
     private boolean nonExpiredPassword=true;
 
 //    @CreatedDate
-//    @Audited
     private LocalDate CreatedDate;
 
     @Column(name = "modified_date")

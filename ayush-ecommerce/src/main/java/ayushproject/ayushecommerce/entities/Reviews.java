@@ -1,5 +1,7 @@
 package ayushproject.ayushecommerce.entities;
 
+import org.hibernate.envers.Audited;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +13,7 @@ public class Reviews {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer reviewId;
     private Integer userId;
+    @Audited
     private String username;
     private Integer productId;
     private String productVariation;

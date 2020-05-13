@@ -1,16 +1,21 @@
 package ayushproject.ayushecommerce.criteriaQuery;
 
+import ayushproject.ayushecommerce.dto.ProductCount;
 import ayushproject.ayushecommerce.entities.Category;
 import ayushproject.ayushecommerce.entities.Product;
 import ayushproject.ayushecommerce.entities.User;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+//import javax.persistence.Query;
+
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 //@Repository
@@ -46,16 +51,24 @@ class CriteriaQueryAdmin {
     }
 
 
-    public List<Integer[]> getProductCount() {
-        CriteriaBuilder criteriaBuilder=entityManager.getCriteriaBuilder();
-        CriteriaQuery<Integer[]> criteriaQuery=criteriaBuilder.createQuery(Integer[].class);
-        Root<Product> userRoot=criteriaQuery.from(Product.class);
-        criteriaQuery.multiselect(userRoot.get("category"),criteriaBuilder.count(userRoot)).groupBy(userRoot.get("category"));
+    public List<ProductCount> getProductCount() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
+        Root<Product> userRoot = criteriaQuery.from(Product.class);
+        criteriaQuery.multiselect(userRoot.get("category"), criteriaBuilder.count(userRoot)).groupBy(userRoot.get("category"));
 
-//        criteriaQuery.select(criteriaBuilder.count(userRoot));
-        TypedQuery<Integer[]> query = entityManager.createQuery(criteriaQuery);
-        System.out.println(query.getResultList());
-        return query.getResultList();
+        //(criteriaBuilder.count(userRoot));
+        List<ProductCount> productCountList=new ArrayList<>();
+        Query<Object[]> query = (Query<Object[]>) entityManager.createQuery(criteriaQuery);
+       List<Object[]> objects= query.getResultList();
+        for (Object[] object :objects){
+            ProductCount productCount=new ProductCount();
+            productCount.setCategoryId((Category) object[0]);
+            productCount.setCount((Long) object[1]);
+            productCountList.add(productCount);
+          }
+        System.out.println(query.getResultList()+"abcde ");
+        return productCountList;
     }
 
     public List<Product> getAllProducts() {
