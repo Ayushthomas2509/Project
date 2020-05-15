@@ -27,14 +27,16 @@ public class ProductController  {
     UserService userService;
 
     private static final Logger logger= LoggerFactory.getLogger(UserController.class);
-    @Cacheable(value = "product")
+
+    @Cacheable(value = "products")
     @GetMapping("/products")
     public Iterable<Product> allProducts(){
         logger.info("Success");
+        userService.ensureUser();
         return productService.allProducts();
     }
 
-   // @Cacheable(value = "product")
+    @Cacheable(value = "product")
     @GetMapping("/products/{category}")
     public List<Product> perCategory(@PathVariable Integer category){
         userService.ensureUser();
@@ -90,6 +92,8 @@ public class ProductController  {
     @Cacheable(value = "product")
     @GetMapping("/products/{productId}/products-variations")
     public List<VariationDto> findAllProductVariations(@PathVariable Integer productId){
+        userService.ensureUser();
+        logger.info("Success");
         return productService.findAllProductVariations(productId);
     }
     @Cacheable(value = "product")

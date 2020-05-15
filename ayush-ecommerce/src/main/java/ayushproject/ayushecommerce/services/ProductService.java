@@ -13,6 +13,7 @@ import ayushproject.ayushecommerce.exceptions.ProductNotFoundException;
 import ayushproject.ayushecommerce.repo.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +23,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Component
-public class ProductService  {
+public class ProductService  implements Serializable{
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -47,6 +48,7 @@ public class ProductService  {
         User user = userRepository.findByname(username);
         return user;
     }
+
 
     public Iterable<Product> allProducts() {
         //activityLogService.activityLog("View all products","product",null);

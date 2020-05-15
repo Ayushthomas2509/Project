@@ -3,6 +3,7 @@ package ayushproject.ayushecommerce.controllers;
 import ayushproject.ayushecommerce.entities.Customer;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;
+import ayushproject.ayushecommerce.services.LogService;
 import ayushproject.ayushecommerce.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +29,15 @@ public class UserController implements Serializable {
     UserService userService;
     @Autowired
     TokenStore tokenStore;
+    @Autowired
+    LogService logService;
 
     private static final Logger logger=LoggerFactory.getLogger(UserController.class);
 
     @Cacheable(value = "user")
     @GetMapping("/users/{offset}/{size}")
     public Iterable<User> allUsers(@PathVariable Integer offset,@PathVariable Integer size){
-        logger.info("Method Accessed");
+        logger.info(logService.info("Method Accessed"));
         userService.ensureAdmin();
         return userService.allUsers(offset,size);
     }

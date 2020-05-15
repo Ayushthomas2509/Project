@@ -1,8 +1,9 @@
 package ayushproject.ayushecommerce.dto;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class VariationDto {
+public class VariationDto implements Serializable {
 
     private Integer id;
     private Integer quantity;

@@ -13,8 +13,8 @@ public class Customer extends  User implements Serializable {
 
     @ElementCollection
     private List<Address> address;
-    @OneToMany
-    private List<Reviews> reviews;
+//    @OneToMany
+//    private List<Reviews> reviews;
     @OneToMany
     private List<Product> products;
 
@@ -48,13 +48,13 @@ public class Customer extends  User implements Serializable {
         this.address = address;
     }
 
-    public List<Reviews> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Reviews> reviews) {
-        this.reviews = reviews;
-    }
+//    public List<Reviews> getReviews() {
+//        return reviews;
+//    }
+//
+//    public void setReviews(List<Reviews> reviews) {
+//        this.reviews = reviews;
+//    }
 
     public List<Product> getProducts() {
         return products;

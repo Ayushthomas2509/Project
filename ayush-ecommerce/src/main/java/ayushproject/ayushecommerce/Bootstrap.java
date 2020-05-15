@@ -39,6 +39,9 @@ public class Bootstrap implements ApplicationRunner {
     CategoryRepository categoryRepository;
     @Autowired
     CategoryFeildValueRepository categoryFeildValueRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -210,10 +213,17 @@ public class Bootstrap implements ApplicationRunner {
         shirt1.setCategory(categoryShirt);
         productRepository.save(shirt1);
 
-        shirt.setOtherVariationsId(Arrays.asList(shirt.getId()));
-        shirt1.setOtherVariationsId(Arrays.asList(shirt1.getId()));
+//        shirt.setOtherVariationsId(Arrays.asList(shirt.getId()));
+//        shirt1.setOtherVariationsId(Arrays.asList(shirt1.getId()));
         productRepository.save(shirt);
         productRepository.save(shirt1);
         productRepository.save(phone);
+
+        Reviews reviews = new Reviews();
+        reviews.setProductId(12);
+        reviews.setReview("a bery Good Product");
+        reviews.setStars(5);
+        reviews.setUserId(user1.getId());
+        reviewRepository.save(reviews);
     }
 }

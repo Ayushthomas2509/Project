@@ -1,17 +1,19 @@
 package ayushproject.ayushecommerce.entities;
 
 import org.hibernate.envers.Audited;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-@Entity
+//@Entity
+@Document
 public class Reviews {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer reviewId;
+    private String reviewId;
     private Integer userId;
     @Audited
     private String username;
@@ -68,11 +70,11 @@ public class Reviews {
         Review = review;
     }
 
-    public Integer getReviewId() {
+    public String getReviewId() {
         return reviewId;
     }
 
-    public void setReviewId(Integer reviewId) {
+    public void setReviewId(String reviewId) {
         this.reviewId = reviewId;
     }
 }

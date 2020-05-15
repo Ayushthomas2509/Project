@@ -48,8 +48,8 @@ public class Product implements Serializable {
     @Audited
     private String productImage;
 
-    @ElementCollection
-    private List<Integer> otherVariationsId;
+//    @ElementCollection
+//    private List<Integer> otherVariationsId;
 
     @Column(name = "created_date",nullable = false,updatable =false)
     @CreatedDate
@@ -64,16 +64,16 @@ public class Product implements Serializable {
 
 //    @ManyToOne
 //    private Seller seller;
-    @OneToMany(cascade = CascadeType.ALL)
-    public List<Reviews> reviews;
+//    @OneToMany(cascade = CascadeType.ALL)
+//    public List<Reviews> reviews;
 
-    public List<Reviews> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Reviews> reviews) {
-        this.reviews = reviews;
-    }
+//    public List<Reviews> getReviews() {
+//        return reviews;
+//    }
+//
+//    public void setReviews(List<Reviews> reviews) {
+//        this.reviews = reviews;
+//    }
 
     public Integer getId() {
         return id;
@@ -155,13 +155,13 @@ public class Product implements Serializable {
         this.metaData = metaData;
     }
 
-    public List<Integer> getOtherVariationsId() {
-        return otherVariationsId;
-    }
-
-    public void setOtherVariationsId(List<Integer> otherVariationsId) {
-        this.otherVariationsId = otherVariationsId;
-    }
+//    public List<Integer> getOtherVariationsId() {
+//        return otherVariationsId;
+//    }
+//
+//    public void setOtherVariationsId(List<Integer> otherVariationsId) {
+//        this.otherVariationsId = otherVariationsId;
+//    }
 
     public Date getCreatedDate() {
         return createdDate;
