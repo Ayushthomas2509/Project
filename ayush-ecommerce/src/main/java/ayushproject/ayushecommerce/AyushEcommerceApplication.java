@@ -1,5 +1,6 @@
 package ayushproject.ayushecommerce;
 
+import ayushproject.ayushecommerce.rabbitmq.JMSReceiver;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -50,13 +51,15 @@ public class AyushEcommerceApplication {
 		redisTemplate.setConnectionFactory(jedisConnectionFactory());
 		return redisTemplate;
 	}
-
-	private static final String SERIALIZATION_ID = "4086d293-522c-4d25-8485-f1c1f5c09218";
-	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-		if ((beanFactory instanceof DefaultListableBeanFactory)) {
-			DefaultListableBeanFactory dlbf = (DefaultListableBeanFactory) beanFactory;
-			dlbf.setSerializationId(SERIALIZATION_ID);
-		}
-	}
+	@Bean
+	JMSReceiver jmsReceiver(){return new JMSReceiver();}
+//
+//	private static final String SERIALIZATION_ID = "4086d293-522c-4d25-8485-f1c1f5c09218";
+//	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+//		if ((beanFactory instanceof DefaultListableBeanFactory)) {
+//			DefaultListableBeanFactory dlbf = (DefaultListableBeanFactory) beanFactory;
+//			dlbf.setSerializationId(SERIALIZATION_ID);
+//		}
+//	}
 
 }

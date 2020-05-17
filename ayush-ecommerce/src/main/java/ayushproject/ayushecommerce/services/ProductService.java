@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Component
+
 public class ProductService  implements Serializable{
     @Autowired
     UserRepository userRepository;
@@ -50,7 +51,9 @@ public class ProductService  implements Serializable{
     }
 
 
+    @Cacheable(cacheNames = "products")
     public Iterable<Product> allProducts() {
+        System.out.println("here");
         //activityLogService.activityLog("View all products","product",null);
         return productRepository.findAll();
     }

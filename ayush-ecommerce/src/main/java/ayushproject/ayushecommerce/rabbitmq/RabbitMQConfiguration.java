@@ -49,20 +49,20 @@ public class RabbitMQConfiguration {
         return connectionFactory;
     }
 
-//    @Bean
-//    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-//                                             MessageListenerAdapter listenerAdapter)
-//    {
-//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-//        container.setConnectionFactory(connectionFactory);
-//        container.setQueueNames(queueName);
-//        container.setMessageListener(listenerAdapter);
-//        return container;
-//    }
-//
-//    @Bean
-//    MessageListenerAdapter listenerAdapter(JMSReceiver jmsReceiver)
-//    {
-//        return new MessageListenerAdapter(jmsReceiver, "receiveMessage");
-//    }
+    @Bean
+    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
+                                             MessageListenerAdapter listenerAdapter)
+    {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setQueueNames(queueName);
+        container.setMessageListener(listenerAdapter);
+        return container;
+    }
+
+    @Bean
+    MessageListenerAdapter listenerAdapter(JMSReceiver jmsReceiver)
+    {
+        return new MessageListenerAdapter(jmsReceiver, "receiveMessage");
+    }
 }
