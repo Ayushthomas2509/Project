@@ -3,10 +3,11 @@ package ayushproject.ayushecommerce.dto;
 import ayushproject.ayushecommerce.entities.CategoryFieldValues;
 
 import javax.persistence.ElementCollection;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public class CategoryFilterDto {
+public class CategoryFilterDto implements Serializable {
     private List<CategoryFieldValues> categoryFieldValues;
     private Set<String> brandsList;
     private Integer maximumPrice=0;

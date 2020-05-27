@@ -28,7 +28,7 @@ public class ProductController  {
 
     private static final Logger logger= LoggerFactory.getLogger(UserController.class);
 
-   // @Cacheable(value = "products")
+
     @GetMapping("/products")
     public Iterable<Product> allProducts(){
         logger.info("Success");
@@ -36,7 +36,7 @@ public class ProductController  {
         return productService.allProducts();
     }
 
-    @Cacheable(value = "product")
+
     @GetMapping("/products/{category}")
     public List<Product> perCategory(@PathVariable Integer category){
         userService.ensureUser();
@@ -70,14 +70,14 @@ public class ProductController  {
         return productService.editElectronicsProduct(id,product);
     }
 
-    @Cacheable(value = "product")
+
     @GetMapping("/enable-product/{id}")
     public String enableProduct(@PathVariable Integer id){
         userService.ensureSeller();
         return productService.enableProduct(id);
     }
 
-    @Cacheable(value = "product")
+
     @GetMapping("/disable-product/{id}")
     public String disableProduct(@PathVariable Integer id){
         userService.ensureSeller();
@@ -89,19 +89,18 @@ public class ProductController  {
         return productService.addProductVariation(productId,variation);
     }
 
-    @Cacheable(value = "product")
     @GetMapping("/products/{productId}/products-variations")
     public List<VariationDto> findAllProductVariations(@PathVariable Integer productId){
         userService.ensureUser();
         logger.info("Success");
         return productService.findAllProductVariations(productId);
     }
-    @Cacheable(value = "product")
+
     @GetMapping("/products/{productId}/similar-products")
     public List<Product> findSimilarProduct(@PathVariable Integer productId){
         return productService.findSimilarProduct(productId);
     }
-    @Cacheable(value = "product")
+
     @GetMapping("/productsDTO/{productId}")
     public ProductDto findProductDTO(@PathVariable Integer productId){
         return productService.findProductDTO(productId);

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-public class CategoryDto implements Serializable {
+public class CategoryDto  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

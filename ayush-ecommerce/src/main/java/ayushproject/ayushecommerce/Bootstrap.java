@@ -6,6 +6,9 @@ import ayushproject.ayushecommerce.entities.*;
 import ayushproject.ayushecommerce.enums.InStock;
 import ayushproject.ayushecommerce.repo.*;
 import ayushproject.ayushecommerce.security.PasswordValidator;
+import ayushproject.ayushecommerce.services.Data;
+import ayushproject.ayushecommerce.services.RandomUserCart;
+import ayushproject.ayushecommerce.services.RandomUserData;
 import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -21,6 +24,8 @@ import javax.validation.ValidatorFactory;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class Bootstrap implements ApplicationRunner {
@@ -41,7 +46,14 @@ public class Bootstrap implements ApplicationRunner {
     CategoryFeildValueRepository categoryFeildValueRepository;
     @Autowired
     ReviewRepository reviewRepository;
-
+    @Autowired
+    RandomUserData randomUserData;
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    RandomUserCart randomUserCart;
+    @Autowired
+    CartRepository cartRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -225,5 +237,46 @@ public class Bootstrap implements ApplicationRunner {
         reviews.setStars(5);
         reviews.setUserId(user1.getId());
         reviewRepository.save(reviews);
+
+//     Data data = new Data();
+//     ExecutorService executor = Executors.newFixedThreadPool(5);
+//     executor.submit(data);
+////     executor.shutdown();
+
+        for(Integer i=0; i<10000; i++){
+         Customer customer = new Customer();
+         customer.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
+         customer.setEmail(randomUserData.name()+"@gmail.com");
+         customer.setName(randomUserData.name());
+         customer.setFirstName(randomUserData.name());
+         customer.setLastName(randomUserData.name());
+         customer.setPassword(randomUserData.password());
+         customer.setAge(randomUserData.number());
+         customer.setDob(randomUserData.date());
+         customerRepository.save(customer);
+        }
+
+        for(Integer j=0; j<5000; j++){
+         Address address1=new Address();
+         address1.setArea(randomUserCart.place());
+         address1.setState(randomUserCart.place());
+         address1.setCity(randomUserCart.place());
+         address1.setCountry(randomUserCart.place());
+         address1.setHousenumber(randomUserCart.houseno());
+         address.setPincode(randomUserCart.zipcode());
+         Cart cart = new Cart();
+         cart.setQuantity(randomUserCart.quantity());
+         cart.setUserid(randomUserCart.userId());
+         cart.setAddress(address1);
+         if(randomUserCart.quantity()/3==0) {
+          cart.setProductid(12);
+         }else if(randomUserCart.quantity()/5==0){
+          cart.setProductid(13);
+         }else{
+          cart.setProductid(14);
+         }
+         cartRepository.save(cart);
+        }
+
     }
 }

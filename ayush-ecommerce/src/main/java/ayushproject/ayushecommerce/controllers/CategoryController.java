@@ -8,6 +8,7 @@ import ayushproject.ayushecommerce.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,12 +20,14 @@ public class CategoryController {
 
     Logger logger= LoggerFactory.getLogger(CategoryController.class);
 
+    @Cacheable(cacheNames = "category")
     @RequestMapping(value = "/Category",method = RequestMethod.GET)
     public Iterable<Category> findAll(){
         logger.info("Method Is Accessed");
         userService.ensureUser();
         return categoryService.findAll();}
 
+        @Cacheable(cacheNames = "category")
     @GetMapping("/Category/{categoryId}")
     public CategoryDto findCategory(@PathVariable Integer categoryId){
         userService.ensureUser();
@@ -45,12 +48,14 @@ public class CategoryController {
         return categoryService.editCategory(newName,categoryId);
     }
 
+   // @Cacheable(cacheNames = "category")
     @GetMapping("/seller/Category")
     public Iterable<CategoryDto> leafCategories(){
         userService.ensureUser();
         logger.info("Leaf Nodes Displayed");
         return categoryService.leafnodeCategories();
     }
+    @Cacheable(cacheNames = "category")
     @GetMapping("/customer/Category/{categoryId}")
     public CategoryFilterDto CategoryFilter(@PathVariable Integer categoryId){
         logger.info("Filtered data shown ");
