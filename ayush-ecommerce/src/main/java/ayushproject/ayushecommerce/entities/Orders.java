@@ -1,96 +1,82 @@
 package ayushproject.ayushecommerce.entities;
 
+import ayushproject.ayushecommerce.enums.InStock;
 import ayushproject.ayushecommerce.enums.Status;
 import org.hibernate.envers.Audited;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@DiscriminatorValue("orders")
-public class Orders implements Serializable {
+public class Orders{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer orderid;
-    @Audited
-    private Status orderstatus;
-    @Audited
-    private Date orderdate;
-    @Embedded
-    private Address address;
-    @ManyToMany
-    private List<Product> products;
-    @ElementCollection
-    private List<Integer> quantity;
-    @ElementCollection
-    private List<Cart> carts;
-    @ManyToOne
-    private Customer user;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer orderId;
+    private Integer AmountPaid;
+    private Date dateCreate;
+    private Date dateUpdated;
+    private Integer customerId;
+    @Enumerated(EnumType.STRING)
+    private Status orderStatus;
 
-    public Integer getOrderid() {
-        return orderid;
+    private Integer addressId;
+
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setOrderid(Integer orderid) {
-        this.orderid = orderid;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
-    public Status getOrderstatus() {
-        return orderstatus;
+    public Integer getAmountPaid() {
+        return AmountPaid;
     }
 
-    public void setOrderstatus(Status orderstatus) {
-        this.orderstatus = orderstatus;
+    public void setAmountPaid(Integer amountPaid) {
+        AmountPaid = amountPaid;
     }
 
-    public Date getOrderdate() {
-        return orderdate;
+    public Date getDateCreate() {
+        return dateCreate;
     }
 
-    public void setOrderdate(Date orderdate) {
-        this.orderdate = orderdate;
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
     }
 
-    public Address getAddress() {
-        return address;
+    public Date getDateUpdated() {
+        return dateUpdated;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setDateUpdated(Date dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
-    public List<Integer> getQuantity() {
-        return quantity;
+    public Integer getAddressId() {
+        return addressId;
     }
 
-    public void setQuantity(List<Integer> quantity) {
-        this.quantity = quantity;
+    public void setAddressId(Integer addressId) {
+        this.addressId = addressId;
     }
 
-    public Customer getUser() {
-        return user;
+    public Status getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setUser(Customer user) {
-        this.user = user;
-    }
-
-
-    public List<Cart> getCarts() {
-        return carts;
-    }
-
-    public void setCarts(List<Cart> carts) {
-        this.carts = carts;
+    public void setOrderStatus(Status orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

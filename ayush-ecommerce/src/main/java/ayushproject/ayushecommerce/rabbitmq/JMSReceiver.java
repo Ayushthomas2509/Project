@@ -15,7 +15,7 @@ public class JMSReceiver implements ChannelAwareBatchMessageListener {
 
          byte[] byteArray = message.getBody();
          Orders orders = new Orders();
-         System.out.println("orderStatus = " + orders.getOrderstatus());
+         System.out.println("orderStatus = " + orders.getOrderStatus());
 
      }
 
@@ -26,6 +26,6 @@ public class JMSReceiver implements ChannelAwareBatchMessageListener {
 
 
     public void receiveMessage(Orders orders){
-        System.out.println("Received< "+orders.getOrderstatus()+" >");
+        System.out.println("Received< "+orders.getOrderStatus()+" >");
     }
 }

@@ -1,5 +1,6 @@
 package ayushproject.ayushecommerce.services;
 
+import ayushproject.ayushecommerce.entities.Cart;
 import ayushproject.ayushecommerce.entities.Customer;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;
@@ -162,7 +163,10 @@ public class UserService {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
 //                user.setCreatedDate(new Date());
-                userRepository.save(user);
+                User customer = userRepository.save(user);
+                Cart cart = new Cart();
+                cart.setUserid(customer.getId());
+                cartRepository.save(cart);
                 activateAccount(user.getName());
                 return messageSource.getMessage("customer.add.message",null,locale);
             }

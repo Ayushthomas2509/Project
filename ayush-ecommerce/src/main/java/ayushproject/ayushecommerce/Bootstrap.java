@@ -4,6 +4,7 @@ import ayushproject.ayushecommerce.entities.*;
 //import ayushproject.ayushecommerce.entities.ParentCategory.Electronics;
 //import ayushproject.ayushecommerce.entities.ParentCategory.Fashion;
 import ayushproject.ayushecommerce.enums.InStock;
+import ayushproject.ayushecommerce.enums.Status;
 import ayushproject.ayushecommerce.repo.*;
 import ayushproject.ayushecommerce.security.PasswordValidator;
 import ayushproject.ayushecommerce.services.Data;
@@ -54,6 +55,11 @@ public class Bootstrap implements ApplicationRunner {
     RandomUserCart randomUserCart;
     @Autowired
     CartRepository cartRepository;
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    OrderProductRepo orderProductRepo;
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -253,30 +259,56 @@ public class Bootstrap implements ApplicationRunner {
          customer.setPassword(randomUserData.password());
          customer.setAge(randomUserData.number());
          customer.setDob(randomUserData.date());
-         customerRepository.save(customer);
+//         customerRepository.save(customer);
         }
 
-        for(Integer j=0; j<5000; j++){
-         Address address1=new Address();
+        for(Integer j=0; j<5000; j++) {
+         Address address1 = new Address();
          address1.setArea(randomUserCart.place());
          address1.setState(randomUserCart.place());
          address1.setCity(randomUserCart.place());
          address1.setCountry(randomUserCart.place());
          address1.setHousenumber(randomUserCart.houseno());
          address.setPincode(randomUserCart.zipcode());
-         Cart cart = new Cart();
-         cart.setQuantity(randomUserCart.quantity());
-         cart.setUserid(randomUserCart.userId());
-         cart.setAddress(address1);
-         if(randomUserCart.quantity()/3==0) {
-          cart.setProductid(12);
-         }else if(randomUserCart.quantity()/5==0){
-          cart.setProductid(13);
-         }else{
-          cart.setProductid(14);
-         }
-         cartRepository.save(cart);
-        }
 
-    }
+//         Cart cart = new Cart();
+//         cart.setQuantity(randomUserCart.quantity());
+//         cart.setUserid(randomUserCart.userId());
+//         cart.setAddress(address1);
+//         if(randomUserCart.quantity()/3==0) {
+//          cart.setProductid(12);
+//         }else if(randomUserCart.quantity()/5==0){
+//          cart.setProductid(13);
+//         }else{
+//          cart.setProductid(14);
+//         }
+//         cartRepository.save(cart);
+        }
+         for(Integer a=0; a<2500; a++){
+          Orders orders = new Orders();
+          orders.setCustomerId(randomUserCart.userId());
+          orders.setOrderStatus(Status.Placed);
+          orders.setAmountPaid(randomUserCart.amount());
+          orders.setDateCreate(randomUserData.date());
+          Orders orders1 = orderRepository.save(orders);
+          OrderProduct orderProduct=new OrderProduct();
+          orderProduct.setOrderId(orders1.getOrderId());
+          orderProduct.setDateCreated(randomUserData.date());
+          orderProduct.setQuantity(randomUserCart.quantity());
+          if(orderProduct.getQuantity()/3==0) {
+           orderProduct.setProductVariantId(12);
+           orderProduct.setPrice(100000);
+         }else if(orderProduct.getQuantity()/5==0){
+           orderProduct.setProductVariantId(13);
+           orderProduct.setPrice(5000);
+         }else{
+           orderProduct.setProductVariantId(14);
+           orderProduct.setPrice(2000);
+         }
+         orderProductRepo.save(orderProduct);
+          System.out.println(a);
+         }
+
+
+        }
 }

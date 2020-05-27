@@ -80,5 +80,12 @@ public class RandomUserCart {
         return rand_int1;
     }
 
+    public Integer amount(){
+        Random rand = new Random();
+        int rand_int1 = rand.nextInt(100000);
+        return rand_int1;
+    }
+
+
 
 }

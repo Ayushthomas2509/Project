@@ -11,19 +11,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private Integer userid;
-    private Integer productid;
-    private Integer quantity;
-    @Embedded
-    private Address address;
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
 
     public Integer getId() {
         return id;
@@ -39,21 +26,5 @@ public class Cart {
 
     public void setUserid(Integer userid) {
         this.userid = userid;
-    }
-
-    public Integer getProductPOSTid() {
-        return productid;
-    }
-
-    public void setProductid(Integer productid) {
-        this.productid = productid;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 }

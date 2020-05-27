@@ -48,7 +48,7 @@ public class WishlistService {
 
 
     public String moveToCart(Integer userId, Integer productId, Integer quantity) {
-        cartService.addToCart(userId,productId,quantity);
+        cartService.addToCart(productId,quantity);
         removeFromWishlist(userId,productId);
         return "Moved to Cart";
     }

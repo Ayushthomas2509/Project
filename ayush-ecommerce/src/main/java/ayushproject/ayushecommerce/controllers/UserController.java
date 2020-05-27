@@ -3,6 +3,7 @@ package ayushproject.ayushecommerce.controllers;
 import ayushproject.ayushecommerce.entities.Customer;
 import ayushproject.ayushecommerce.entities.Seller;
 import ayushproject.ayushecommerce.entities.User;
+import ayushproject.ayushecommerce.services.Db2CsvExporterService;
 import ayushproject.ayushecommerce.services.LogService;
 import ayushproject.ayushecommerce.services.UserService;
 import org.slf4j.Logger;
@@ -31,6 +32,8 @@ public class UserController implements Serializable {
     TokenStore tokenStore;
     @Autowired
     LogService logService;
+    @Autowired
+    Db2CsvExporterService db2CsvExporterService;
 
     private static final Logger logger=LoggerFactory.getLogger(UserController.class);
 
@@ -118,7 +121,11 @@ public class UserController implements Serializable {
     }
 
 
-
+    @GetMapping("/csv")
+    public String convertCSV() {
+        db2CsvExporterService.convert();
+        return "Done";
+    }
 
 
 

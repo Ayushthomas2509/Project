@@ -1,6 +1,7 @@
 package ayushproject.ayushecommerce.controllers;
 
 import ayushproject.ayushecommerce.entities.Cart;
+import ayushproject.ayushecommerce.entities.CartProductVariation;
 import ayushproject.ayushecommerce.services.CartService;
 import ayushproject.ayushecommerce.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,9 @@ public class CartController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/cart/{userid}")
-    public Iterable<Cart> viewCart(@PathVariable Integer userid) {
-        return cartService.viewCart(userid);
+    @GetMapping(value = "/cart")
+    public Iterable<CartProductVariation> viewCart() {
+        return cartService.viewCart();
     }
 
     @GetMapping(value = "/carts")
@@ -23,10 +24,10 @@ public class CartController {
         return cartService.allcarts();
     }
 
-    @PostMapping(value = "/{userId}/addToCart/products/{productId}")
-    public String addToCart(@PathVariable Integer userId, @PathVariable Integer productId, @RequestParam Integer quantity) {
+    @PostMapping(value = "/addToCart/products/{productId}")
+    public String addToCart(@PathVariable Integer productId, @RequestParam Integer quantity) {
         userService.ensureCustomerOrAdmin();
-        return cartService.addToCart(userId, productId, quantity);
+        return cartService.addToCart(productId, quantity);
     }
 
     @PostMapping(value = "/{userId}/removeFromCart/products/{productId}")
