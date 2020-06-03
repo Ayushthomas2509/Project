@@ -17,7 +17,7 @@ public class Db2CsvExporterService {
         String username = "root";
         String password = "igdefault";
 
-        String csvFilePath = "Reviews-export.csv";
+        String csvFilePath = "data-export.csv";
 
         try (Connection connection = DriverManager.getConnection(jdbcURL, username, password)) {
             String sql = "SELECT * FROM orders";

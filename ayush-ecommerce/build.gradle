@@ -44,6 +44,9 @@ dependencies {
 	compile group: 'org.springframework', name: 'spring-jms'
 
 
+	compile group: 'org.springframework.boot', name:'spring-boot-starter-batch'
+	compile 'com.thoughtworks.xstream:xstream:1.4.9'
+//	compile group: 'jackson-module-jsonSchema', name: 'jackson-module-jsonSchema'
 	//mongoDB dependency
 	compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
 

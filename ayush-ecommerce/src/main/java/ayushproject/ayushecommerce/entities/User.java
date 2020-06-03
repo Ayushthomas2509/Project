@@ -70,6 +70,16 @@ public class User implements UserDetails , Serializable {
         this.password = password;
         this.grantAuthorities = grantAuthorities;     }
 
+    public User(String name, Date dob, String firstName, String email, String lastName, Integer age, String password, List<String> authoritiesList) {
+        this.name = name;
+        this.dob = dob;
+        this.firstName = firstName;
+        this.email = email;
+        this.lastName = lastName;
+        this.age = age;
+        this.password = password;
+        this.authoritiesList = authoritiesList;
+    }
 
     public User() {
     }

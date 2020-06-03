@@ -5,6 +5,7 @@ import ayushproject.ayushecommerce.security.GrantAuthorityImpl;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 @Entity
 @DiscriminatorValue("Customer")
@@ -30,7 +31,13 @@ public class Customer extends  User implements Serializable {
     @OneToMany
     private List<Orders> orders;
 
+    public Customer() {
 
+    }
+
+    public Customer(String name, Date dob, String firstName, String email, String lastName, Integer age, String password, List<String> authoritiesList) {
+        super(name, dob, firstName, email, lastName, age, password, authoritiesList);
+    }
 
     public Integer getCustid() {
         return custid;

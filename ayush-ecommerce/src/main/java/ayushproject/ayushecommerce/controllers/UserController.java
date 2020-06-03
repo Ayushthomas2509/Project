@@ -123,7 +123,7 @@ public class UserController implements Serializable {
 
     @GetMapping("/csv")
     public String convertCSV() {
-        db2CsvExporterService.convert();
+        db2CsvExporterService.convert1();
         return "Done";
     }
 
