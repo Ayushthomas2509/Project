@@ -26,6 +26,8 @@ public class OrderService {
     RabbitTemplate rabbitTemplate;
     @Autowired
     CartProductVariationRepository cartProductVariationRepository;
+    @Autowired
+    OrderProductRepo orderProductRepo;
 
     public Iterable<Orders> findAll(){
         return orderRepository.findAll();
@@ -33,30 +35,35 @@ public class OrderService {
 
     public String placeOrder(Integer userid,Integer address) {
         Cart cart = cartRepository.findByuserid(userid);
-        Iterable<CartProductVariation> cartProductVariation = cartProductVariationRepository.findByCartId(cart.getId());
+        System.out.println("hii");
+        List<CartProductVariation> cartProductVariation = cartProductVariationRepository.findByCartId(cart.getId());
         Orders orders = new Orders();
         orders.setAddressId(address);
         orders.setCustomerId(userid);
         Orders order = orderRepository.save(orders);
+        System.out.println(order.getOrderId());
         Integer amount = 0;
-        if (!cartProductVariation.iterator().hasNext()) {
+        if (cartProductVariation.isEmpty()) {
             return "Your Cart is Empty";
         }
-        while (cartProductVariation.iterator().hasNext()){
-            CartProductVariation cartProductVariation1 = cartProductVariation.iterator().next();
+        for(CartProductVariation cartProductVariation1: cartProductVariation){
+            System.out.println("798");
+//            CartProductVariation cartProductVariation1 = cartProductVariation.iterator().next();
             Optional<Product> product = productRepository.findById(cartProductVariation1.getVariationId());
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setProductVariantId(cartProductVariation1.getVariationId());
             orderProduct.setQuantity(cartProductVariation1.getQuantity());
             orderProduct.setPrice(product.get().getPrice());
             orderProduct.setOrderId(order.getOrderId());
+            orderProductRepo.save(orderProduct);
             amount=amount+product.get().getPrice();
             cartProductVariationRepository.deleteById(cartProductVariation1.getId());
         }
-
+        System.out.println("hii thomas bro");
         order.setAmountPaid(amount);
-        orderRepository.save(order);
+//        orderRepository.save(order);
 
+        System.out.println("hii thomas bro2");
        // order.setAddress(customerRepository.findById(userid).get().getAddress().get(address));
         order.setOrderStatus(Status.Placed);
         System.out.println("Sending message...");

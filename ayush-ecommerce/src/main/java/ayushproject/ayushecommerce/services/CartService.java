@@ -41,14 +41,14 @@ public class CartService {
 
     public String addToCart (Integer productID, Integer quantity){
         Cart cart = cartRepository.findByuserid(getLoggedInCustomer().getId());
-        System.out.println("ayush");
+//        System.out.println("ayush");
         Product product = productRepository.findById(productID).get();
         if (product.getInStock() == InStock.Yes){
             if (product.getQuantity()-quantity<0){
                 return "Not In Stock="+product.getQuantity();
             }
             Optional<CartProductVariation> cartProductVariation = cartProductVariationRepository.findByCartIdAndProductId(cart.getId(),productID);
-            System.out.println("Thomas");
+//            System.out.println("Thomas");
                 if (cartProductVariation.isPresent()){
                     cartProductVariation.get().setQuantity(cartProductVariation.get().getQuantity()+quantity);
                     product.setQuantity(product.getQuantity()-quantity);
@@ -71,7 +71,8 @@ public class CartService {
                  product.setInStock(InStock.No);
             }
             productRepository.save(product);
-            cartRepository.save(cart);
+            cartProductVariationRepository.save(cartProductVariation1);
+//            cartRepository.save(cart);
 
             return "Moved To Cart";
     }

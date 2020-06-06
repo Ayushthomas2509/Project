@@ -11,5 +11,6 @@ import java.util.List;
 public interface CartRepository extends CrudRepository<Cart,Integer> {
     @Query(value = "select * from Cart",nativeQuery = true)
     List<Cart> allcarts();
+    @Query(value = "select * from cart where userid=:userid",nativeQuery = true)
     Cart findByuserid(@Param("userid") Integer userid);
 }

@@ -58,6 +58,8 @@ public class Bootstrap implements ApplicationRunner {
  OrderRepository orderRepository;
  @Autowired
  OrderProductRepo orderProductRepo;
+// @Autowired
+// CartRepository cartRepository;
 
 
  @Override
@@ -102,6 +104,11 @@ public class Bootstrap implements ApplicationRunner {
   user1.setEnabled(true);
   user1.setIs_active(true);
   userRepository.save(user1);
+
+
+  Cart cart = new Cart();
+  cart.setUserid(user1.getId());
+  cartRepository.save(cart);
 
   Seller seller1 = new Seller();
   seller1.setFirstName("Abhi");
@@ -243,28 +250,28 @@ public class Bootstrap implements ApplicationRunner {
   reviewRepository.save(reviews);
 
 
+//
+//  for (Integer i = 0; i < 100000; i++) {
+//   Customer customer = new Customer();
+//   customer.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
+//   customer.setEmail(randomUserData.name() + "@gmail.com");
+//   customer.setName(randomUserData.name());
+//   customer.setFirstName(randomUserData.name());
+//   customer.setLastName(randomUserData.name());
+//   customer.setPassword(randomUserData.password());
+//   customer.setAge(randomUserData.number());
+//   customer.setDob(randomUserData.date());
+//   customerRepository.save(customer);
+//  }
 
-  for (Integer i = 0; i < 100000; i++) {
-   Customer customer = new Customer();
-   customer.setAuthoritiesList(Arrays.asList("ROLE_CUSTOMER"));
-   customer.setEmail(randomUserData.name() + "@gmail.com");
-   customer.setName(randomUserData.name());
-   customer.setFirstName(randomUserData.name());
-   customer.setLastName(randomUserData.name());
-   customer.setPassword(randomUserData.password());
-   customer.setAge(randomUserData.number());
-   customer.setDob(randomUserData.date());
-   customerRepository.save(customer);
-  }
-
-  for (Integer j = 0; j < 50000; j++) {
-   Address address1 = new Address();
-   address1.setArea(randomUserCart.place());
-   address1.setState(randomUserCart.place());
-   address1.setCity(randomUserCart.place());
-   address1.setCountry(randomUserCart.place());
-   address1.setHousenumber(randomUserCart.houseno());
-   address.setPincode(randomUserCart.zipcode());}
+//  for (Integer j = 0; j < 50000; j++) {
+//   Address address1 = new Address();
+//   address1.setArea(randomUserCart.place());
+//   address1.setState(randomUserCart.place());
+//   address1.setCity(randomUserCart.place());
+//   address1.setCountry(randomUserCart.place());
+//   address1.setHousenumber(randomUserCart.houseno());
+//   address.setPincode(randomUserCart.zipcode());}
 
 //         Cart cart = new Cart();
 //         cart.setQuantity(randomUserCart.quantity());
@@ -279,30 +286,30 @@ public class Bootstrap implements ApplicationRunner {
 //         }
 //         cartRepository.save(cart);
    // }
-   for (Integer a = 0; a < 25000; a++) {
-    Orders orders = new Orders();
-    orders.setCustomerId(randomUserCart.userId());
-    orders.setOrderStatus(Status.Placed);
-    orders.setAmountPaid(randomUserCart.amount());
-    orders.setDateCreate(randomUserData.date());
-    Orders orders1 = orderRepository.save(orders);
-    OrderProduct orderProduct = new OrderProduct();
-    orderProduct.setOrderId(orders1.getOrderId());
-    orderProduct.setDateCreated(randomUserData.date());
-    orderProduct.setQuantity(randomUserCart.quantity());
-    if (orderProduct.getQuantity() / 3 == 0) {
-     orderProduct.setProductVariantId(12);
-     orderProduct.setPrice(100000);
-    } else if (orderProduct.getQuantity() / 5 == 0) {
-     orderProduct.setProductVariantId(13);
-     orderProduct.setPrice(5000);
-    } else {
-     orderProduct.setProductVariantId(14);
-     orderProduct.setPrice(2000);
-    }
-    orderProductRepo.save(orderProduct);
-    //System.out.println(a);
-   }
+//   for (Integer a = 0; a < 25000; a++) {
+//    Orders orders = new Orders();
+//    orders.setCustomerId(randomUserCart.userId());
+//    orders.setOrderStatus(Status.Placed);
+//    orders.setAmountPaid(randomUserCart.amount());
+//    orders.setDateCreate(randomUserData.date());
+//    Orders orders1 = orderRepository.save(orders);
+//    OrderProduct orderProduct = new OrderProduct();
+//    orderProduct.setOrderId(orders1.getOrderId());
+//    orderProduct.setDateCreated(randomUserData.date());
+//    orderProduct.setQuantity(randomUserCart.quantity());
+//    if (orderProduct.getQuantity() / 3 == 0) {
+//     orderProduct.setProductVariantId(12);
+//     orderProduct.setPrice(100000);
+//    } else if (orderProduct.getQuantity() / 5 == 0) {
+//     orderProduct.setProductVariantId(13);
+//     orderProduct.setPrice(5000);
+//    } else {
+//     orderProduct.setProductVariantId(14);
+//     orderProduct.setPrice(2000);
+//    }
+//    orderProductRepo.save(orderProduct);
+//    //System.out.println(a);
+//   }
 
 //         Runnable ct1=new CustomerTask();
 //         Runnable ct2=new CustomerTask();
