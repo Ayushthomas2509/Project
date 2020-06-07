@@ -11,7 +11,10 @@ import ayushproject.ayushecommerce.repo.CategoryFieldRepositary;
 import ayushproject.ayushecommerce.repo.CategoryRepository;
 import ayushproject.ayushecommerce.repo.ProductRepository;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -34,7 +37,11 @@ public class CategoryService {
     private ModelMapper modelMapper;
     //private java.lang.Object Object;
 
+    Logger logger = LoggerFactory.getLogger("CategoryService.class");
+
+    @Cacheable(cacheNames = "categories")
     public Iterable<Category> findAll() {
+        logger.info("List of category accessed");
         Pageable paging = PageRequest.of(0, 10, Sort.by("name").ascending());
         return categoryRepository.findAll(paging);
     }

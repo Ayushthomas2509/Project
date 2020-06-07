@@ -28,7 +28,7 @@ public class ProductController  {
 
     private static final Logger logger= LoggerFactory.getLogger(UserController.class);
 
-
+    
     @GetMapping("/products")
     public Iterable<Product> allProducts(){
         logger.info("Success");

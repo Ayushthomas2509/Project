@@ -12,6 +12,8 @@ import ayushproject.ayushecommerce.exceptions.InvalidFieldException;
 import ayushproject.ayushecommerce.exceptions.ProductNotFoundException;
 import ayushproject.ayushecommerce.repo.*;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.SimpleMailMessage;
@@ -42,6 +44,8 @@ public class ProductService  implements Serializable{
     @Autowired
     ActivityLogService activityLogService;
 
+    Logger logger = LoggerFactory.getLogger("ProductService.class");
+
     public User getLoggedInCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userDetail = (User) authentication.getPrincipal();
@@ -53,7 +57,7 @@ public class ProductService  implements Serializable{
 
     @Cacheable(cacheNames = "products")
     public Iterable<Product> allProducts() {
-        System.out.println("here");
+        logger.info("list of products received");
         //activityLogService.activityLog("View all products","product",null);
         return productRepository.findAll();
     }
