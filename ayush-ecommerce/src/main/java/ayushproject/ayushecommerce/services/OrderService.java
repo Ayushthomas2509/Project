@@ -35,7 +35,6 @@ public class OrderService {
 
     public String placeOrder(Integer userid,Integer address) {
         Cart cart = cartRepository.findByuserid(userid);
-        System.out.println("hii");
         List<CartProductVariation> cartProductVariation = cartProductVariationRepository.findByCartId(cart.getId());
         Orders orders = new Orders();
         orders.setAddressId(address);
@@ -47,8 +46,6 @@ public class OrderService {
             return "Your Cart is Empty";
         }
         for(CartProductVariation cartProductVariation1: cartProductVariation){
-            System.out.println("798");
-//            CartProductVariation cartProductVariation1 = cartProductVariation.iterator().next();
             Optional<Product> product = productRepository.findById(cartProductVariation1.getVariationId());
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setProductVariantId(cartProductVariation1.getVariationId());
@@ -59,12 +56,7 @@ public class OrderService {
             amount=amount+product.get().getPrice();
             cartProductVariationRepository.deleteById(cartProductVariation1.getId());
         }
-        System.out.println("hii thomas bro");
         order.setAmountPaid(amount);
-//        orderRepository.save(order);
-
-        System.out.println("hii thomas bro2");
-       // order.setAddress(customerRepository.findById(userid).get().getAddress().get(address));
         order.setOrderStatus(Status.Placed);
         System.out.println("Sending message...");
         rabbitTemplate.convertAndSend(RabbitMQConfiguration.topicExchangeName,
